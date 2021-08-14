@@ -1,0 +1,23 @@
+!import testlib.f5w
+
+let main = fn () {
+
+    let flag = false;
+
+    try {
+        assert(1 + 2 != 4);
+        flag = true;
+    } except @AssertError {
+        std::io::print("OKkkkk");
+    } except @RuntimeError {
+        std::io::print("Runtime error");
+        flag = false;
+    };
+
+    for {
+        break; # comment
+    };
+
+    return;
+
+};

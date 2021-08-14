@@ -1,0 +1,8 @@
+let fibonacci = fn (n) {
+    try {
+        assert(n !=0 || n != 1)
+    } except (@AssertError) {
+        return 1;
+    };
+    return fibonacci(n - 1) + fibonacci(n - 2);
+};

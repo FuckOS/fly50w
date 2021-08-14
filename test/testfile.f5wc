@@ -1,0 +1,617 @@
+[
+    {
+        "type": "T_KEYWORD",
+        "value": "let",
+        "scalar": null
+    },
+    {
+        "type": "T_IDENTIFY",
+        "value": "fibonacci",
+        "scalar": null
+    },
+    {
+        "type": "T_SYMBOL",
+        "value": "=",
+        "scalar": null
+    },
+    {
+        "type": "T_KEYWORD",
+        "value": "fn",
+        "scalar": null
+    },
+    {
+        "type": "T_SYMBOL",
+        "value": "(",
+        "scalar": null
+    },
+    {
+        "type": "T_IDENTIFY",
+        "value": "n",
+        "scalar": null
+    },
+    {
+        "type": "T_SYMBOL",
+        "value": ")",
+        "scalar": null
+    },
+    {
+        "type": "T_SYMBOL",
+        "value": "{",
+        "scalar": null
+    },
+    {
+        "type": "T_KEYWORD",
+        "value": "try",
+        "scalar": null
+    },
+    {
+        "type": "T_SYMBOL",
+        "value": "{",
+        "scalar": null
+    },
+    {
+        "type": "T_IDENTIFY",
+        "value": "assert",
+        "scalar": null
+    },
+    {
+        "type": "T_SYMBOL",
+        "value": "(",
+        "scalar": null
+    },
+    {
+        "type": "T_IDENTIFY",
+        "value": "n",
+        "scalar": null
+    },
+    {
+        "type": "T_SYMBOL",
+        "value": "!=",
+        "scalar": null
+    },
+    {
+        "type": "T_SCALAR",
+        "value": "0",
+        "scalar": {
+            "type": "numeric",
+            "value": "0"
+        }
+    },
+    {
+        "type": "T_SYMBOL",
+        "value": "||",
+        "scalar": null
+    },
+    {
+        "type": "T_IDENTIFY",
+        "value": "n",
+        "scalar": null
+    },
+    {
+        "type": "T_SYMBOL",
+        "value": "!=",
+        "scalar": null
+    },
+    {
+        "type": "T_SCALAR",
+        "value": "1",
+        "scalar": {
+            "type": "numeric",
+            "value": "1"
+        }
+    },
+    {
+        "type": "T_SYMBOL",
+        "value": ")",
+        "scalar": null
+    },
+    {
+        "type": "T_SYMBOL",
+        "value": "}",
+        "scalar": null
+    },
+    {
+        "type": "T_KEYWORD",
+        "value": "except",
+        "scalar": null
+    },
+    {
+        "type": "T_SYMBOL",
+        "value": "(",
+        "scalar": null
+    },
+    {
+        "type": "T_ANNOTATION",
+        "value": "AssertError",
+        "scalar": null
+    },
+    {
+        "type": "T_SYMBOL",
+        "value": ")",
+        "scalar": null
+    },
+    {
+        "type": "T_SYMBOL",
+        "value": "{",
+        "scalar": null
+    },
+    {
+        "type": "T_KEYWORD",
+        "value": "return",
+        "scalar": null
+    },
+    {
+        "type": "T_SCALAR",
+        "value": "1",
+        "scalar": {
+            "type": "numeric",
+            "value": "1"
+        }
+    },
+    {
+        "type": "T_SYMBOL",
+        "value": ";",
+        "scalar": null
+    },
+    {
+        "type": "T_SYMBOL",
+        "value": "}",
+        "scalar": null
+    },
+    {
+        "type": "T_SYMBOL",
+        "value": ";",
+        "scalar": null
+    },
+    {
+        "type": "T_KEYWORD",
+        "value": "return",
+        "scalar": null
+    },
+    {
+        "type": "T_IDENTIFY",
+        "value": "fibonacci",
+        "scalar": null
+    },
+    {
+        "type": "T_SYMBOL",
+        "value": "(",
+        "scalar": null
+    },
+    {
+        "type": "T_IDENTIFY",
+        "value": "n",
+        "scalar": null
+    },
+    {
+        "type": "T_SYMBOL",
+        "value": "-",
+        "scalar": null
+    },
+    {
+        "type": "T_SCALAR",
+        "value": "1",
+        "scalar": {
+            "type": "numeric",
+            "value": "1"
+        }
+    },
+    {
+        "type": "T_SYMBOL",
+        "value": ")",
+        "scalar": null
+    },
+    {
+        "type": "T_SYMBOL",
+        "value": "+",
+        "scalar": null
+    },
+    {
+        "type": "T_IDENTIFY",
+        "value": "fibonacci",
+        "scalar": null
+    },
+    {
+        "type": "T_SYMBOL",
+        "value": "(",
+        "scalar": null
+    },
+    {
+        "type": "T_IDENTIFY",
+        "value": "n",
+        "scalar": null
+    },
+    {
+        "type": "T_SYMBOL",
+        "value": "-",
+        "scalar": null
+    },
+    {
+        "type": "T_SCALAR",
+        "value": "2",
+        "scalar": {
+            "type": "numeric",
+            "value": "2"
+        }
+    },
+    {
+        "type": "T_SYMBOL",
+        "value": ")",
+        "scalar": null
+    },
+    {
+        "type": "T_SYMBOL",
+        "value": ";",
+        "scalar": null
+    },
+    {
+        "type": "T_SYMBOL",
+        "value": "}",
+        "scalar": null
+    },
+    {
+        "type": "T_SYMBOL",
+        "value": ";",
+        "scalar": null
+    },
+    {
+        "type": "T_KEYWORD",
+        "value": "let",
+        "scalar": null
+    },
+    {
+        "type": "T_IDENTIFY",
+        "value": "main",
+        "scalar": null
+    },
+    {
+        "type": "T_SYMBOL",
+        "value": "=",
+        "scalar": null
+    },
+    {
+        "type": "T_KEYWORD",
+        "value": "fn",
+        "scalar": null
+    },
+    {
+        "type": "T_SYMBOL",
+        "value": "(",
+        "scalar": null
+    },
+    {
+        "type": "T_SYMBOL",
+        "value": ")",
+        "scalar": null
+    },
+    {
+        "type": "T_SYMBOL",
+        "value": "{",
+        "scalar": null
+    },
+    {
+        "type": "T_KEYWORD",
+        "value": "let",
+        "scalar": null
+    },
+    {
+        "type": "T_IDENTIFY",
+        "value": "flag",
+        "scalar": null
+    },
+    {
+        "type": "T_SYMBOL",
+        "value": "=",
+        "scalar": null
+    },
+    {
+        "type": "T_IDENTIFY",
+        "value": "false",
+        "scalar": null
+    },
+    {
+        "type": "T_SYMBOL",
+        "value": ";",
+        "scalar": null
+    },
+    {
+        "type": "T_KEYWORD",
+        "value": "try",
+        "scalar": null
+    },
+    {
+        "type": "T_SYMBOL",
+        "value": "{",
+        "scalar": null
+    },
+    {
+        "type": "T_IDENTIFY",
+        "value": "assert",
+        "scalar": null
+    },
+    {
+        "type": "T_SYMBOL",
+        "value": "(",
+        "scalar": null
+    },
+    {
+        "type": "T_SCALAR",
+        "value": "1",
+        "scalar": {
+            "type": "numeric",
+            "value": "1"
+        }
+    },
+    {
+        "type": "T_SYMBOL",
+        "value": "+",
+        "scalar": null
+    },
+    {
+        "type": "T_SCALAR",
+        "value": "2",
+        "scalar": {
+            "type": "numeric",
+            "value": "2"
+        }
+    },
+    {
+        "type": "T_SYMBOL",
+        "value": "!=",
+        "scalar": null
+    },
+    {
+        "type": "T_SCALAR",
+        "value": "4",
+        "scalar": {
+            "type": "numeric",
+            "value": "4"
+        }
+    },
+    {
+        "type": "T_SYMBOL",
+        "value": ")",
+        "scalar": null
+    },
+    {
+        "type": "T_SYMBOL",
+        "value": ";",
+        "scalar": null
+    },
+    {
+        "type": "T_IDENTIFY",
+        "value": "flag",
+        "scalar": null
+    },
+    {
+        "type": "T_SYMBOL",
+        "value": "=",
+        "scalar": null
+    },
+    {
+        "type": "T_IDENTIFY",
+        "value": "true",
+        "scalar": null
+    },
+    {
+        "type": "T_SYMBOL",
+        "value": ";",
+        "scalar": null
+    },
+    {
+        "type": "T_SYMBOL",
+        "value": "}",
+        "scalar": null
+    },
+    {
+        "type": "T_KEYWORD",
+        "value": "except",
+        "scalar": null
+    },
+    {
+        "type": "T_ANNOTATION",
+        "value": "AssertError",
+        "scalar": null
+    },
+    {
+        "type": "T_SYMBOL",
+        "value": "{",
+        "scalar": null
+    },
+    {
+        "type": "T_IDENTIFY",
+        "value": "std",
+        "scalar": null
+    },
+    {
+        "type": "T_SYMBOL",
+        "value": "::",
+        "scalar": null
+    },
+    {
+        "type": "T_IDENTIFY",
+        "value": "io",
+        "scalar": null
+    },
+    {
+        "type": "T_SYMBOL",
+        "value": "::",
+        "scalar": null
+    },
+    {
+        "type": "T_IDENTIFY",
+        "value": "print",
+        "scalar": null
+    },
+    {
+        "type": "T_SYMBOL",
+        "value": "(",
+        "scalar": null
+    },
+    {
+        "type": "T_SCALAR",
+        "value": "\"OKkkkk",
+        "scalar": {
+            "type": "string",
+            "value": "OKkkkk"
+        }
+    },
+    {
+        "type": "T_SYMBOL",
+        "value": ")",
+        "scalar": null
+    },
+    {
+        "type": "T_SYMBOL",
+        "value": ";",
+        "scalar": null
+    },
+    {
+        "type": "T_SYMBOL",
+        "value": "}",
+        "scalar": null
+    },
+    {
+        "type": "T_KEYWORD",
+        "value": "except",
+        "scalar": null
+    },
+    {
+        "type": "T_ANNOTATION",
+        "value": "RuntimeError",
+        "scalar": null
+    },
+    {
+        "type": "T_SYMBOL",
+        "value": "{",
+        "scalar": null
+    },
+    {
+        "type": "T_IDENTIFY",
+        "value": "std",
+        "scalar": null
+    },
+    {
+        "type": "T_SYMBOL",
+        "value": "::",
+        "scalar": null
+    },
+    {
+        "type": "T_IDENTIFY",
+        "value": "io",
+        "scalar": null
+    },
+    {
+        "type": "T_SYMBOL",
+        "value": "::",
+        "scalar": null
+    },
+    {
+        "type": "T_IDENTIFY",
+        "value": "print",
+        "scalar": null
+    },
+    {
+        "type": "T_SYMBOL",
+        "value": "(",
+        "scalar": null
+    },
+    {
+        "type": "T_SCALAR",
+        "value": "\"Runtime error",
+        "scalar": {
+            "type": "string",
+            "value": "Runtime error"
+        }
+    },
+    {
+        "type": "T_SYMBOL",
+        "value": ")",
+        "scalar": null
+    },
+    {
+        "type": "T_SYMBOL",
+        "value": ";",
+        "scalar": null
+    },
+    {
+        "type": "T_IDENTIFY",
+        "value": "flag",
+        "scalar": null
+    },
+    {
+        "type": "T_SYMBOL",
+        "value": "=",
+        "scalar": null
+    },
+    {
+        "type": "T_IDENTIFY",
+        "value": "false",
+        "scalar": null
+    },
+    {
+        "type": "T_SYMBOL",
+        "value": ";",
+        "scalar": null
+    },
+    {
+        "type": "T_SYMBOL",
+        "value": "}",
+        "scalar": null
+    },
+    {
+        "type": "T_SYMBOL",
+        "value": ";",
+        "scalar": null
+    },
+    {
+        "type": "T_KEYWORD",
+        "value": "for",
+        "scalar": null
+    },
+    {
+        "type": "T_SYMBOL",
+        "value": "{",
+        "scalar": null
+    },
+    {
+        "type": "T_IDENTIFY",
+        "value": "break",
+        "scalar": null
+    },
+    {
+        "type": "T_SYMBOL",
+        "value": ";",
+        "scalar": null
+    },
+    {
+        "type": "T_SYMBOL",
+        "value": "}",
+        "scalar": null
+    },
+    {
+        "type": "T_SYMBOL",
+        "value": ";",
+        "scalar": null
+    },
+    {
+        "type": "T_KEYWORD",
+        "value": "return",
+        "scalar": null
+    },
+    {
+        "type": "T_SYMBOL",
+        "value": ";",
+        "scalar": null
+    },
+    {
+        "type": "T_SYMBOL",
+        "value": "}",
+        "scalar": null
+    },
+    {
+        "type": "T_SYMBOL",
+        "value": ";",
+        "scalar": null
+    }
+]
