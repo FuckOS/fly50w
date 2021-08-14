@@ -3,6 +3,7 @@
 namespace Fly50w\CLI;
 
 use Fly50w\Lexer\Lexer;
+use Fly50w\Parser\Parser;
 use Fly50w\Version;
 use League\CLImate\CLImate;
 
@@ -38,6 +39,12 @@ class Application
                 'description' => 'Use interactive mode',
                 'noValue' => true
             ],
+            'force' => [
+                'prefix' => 'f',
+                'longPrefix' => 'force',
+                'description' => 'Force overwrite output',
+                'noValue' => true
+            ],
             'output' => [
                 'prefix' => 'o',
                 'longPrefix' => 'output',
@@ -52,7 +59,7 @@ class Application
             "</yellow></underline>\r\n";
         $this->cli->description(
             $this->head .
-                '<bold><red>DESCRIPTION</red></bold> Fly50w helps ' .
+                '<bold><cyan>DESCRIPTION</cyan></bold> Fly50w helps ' .
                 'you create programs with more than <bold>500k</bold> ' .
                 'lines of code easily.'
         );
@@ -65,6 +72,7 @@ class Application
             $this->cli->usage($argv);
             return;
         }
+        $flag = false;
         if ($this->cli->arguments->defined('compile')) {
             $this->cli->out($this->head);
             $input = $this->cli->arguments->get('compile');
@@ -73,6 +81,13 @@ class Application
                 $output = $this->cli->arguments->get('output');
             }
             $this->doCompile($input, $output);
+            $flag = true;
+        }
+        if ($this->cli->arguments->defined('run')) {
+            $flag = true;
+        }
+        if (!$flag) {
+            $this->cli->usage($argv);
         }
     }
 
@@ -82,7 +97,7 @@ class Application
             $this->cli->bold()->red()->backgroundYellow("No such file: $input");
             exit(1);
         }
-        if (file_exists($output)) {
+        if (file_exists($output) && (!$this->cli->arguments->defined('force'))) {
             $prompt = $this->cli->radio(
                 prompt: "<bold><red>[ERROR]</red></bold> File <bold><cyan>$output</cyan></bold>" .
                     " already exists.\r\n<bold>=> <magenta>Overwrite?</magenta></bold>",
@@ -101,6 +116,7 @@ class Application
         $this->cli->info("Initializing compiler... ");
 
         $lexer = new Lexer();
+        $parser = new Parser();
 
         $this->cli->info("Merging code files... ")->br();
 
@@ -129,10 +145,12 @@ class Application
         $tokens = $lexer->standardize($bare_tokens);
 
         $this->cli->info("Parsing code... ");
-        // sleep(1);
+
+        $ast = $parser->parse($tokens, $input);
+
         $this->cli->info("Generating fly50vm recognizable instructions...");
         // sleep(1);
-        file_put_contents($output, json_encode($tokens, \JSON_PRETTY_PRINT));
+        file_put_contents($output, json_encode($ast, \JSON_PRETTY_PRINT));
         $this->cli->br();
 
         $this->cli->out(
