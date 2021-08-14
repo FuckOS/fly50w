@@ -1,0 +1,10 @@
+#!/usr/bin/php
+<?php
+
+use Fly50w\CLI\Application;
+
+require_once __DIR__ . "/vendor/autoload.php";
+
+$app = new Application();
+
+$app->run($argv);

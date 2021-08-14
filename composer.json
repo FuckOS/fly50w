@@ -1,0 +1,18 @@
+{
+    "name": "xtlsoft/fly50w",
+    "autoload": {
+        "psr-4": {
+            "Fly50w\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Tianle Xu",
+            "email": "xtl@xtlsoft.top"
+        }
+    ],
+    "require": {
+        "league/climate": "^3.7",
+        "symfony/yaml": "^5.3"
+    }
+}
