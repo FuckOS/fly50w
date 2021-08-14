@@ -2,13 +2,32 @@
     "filename": "test\/testfile.f5w",
     "children": [
         {
+            "children": [
+                {
+                    "name": "fibonacci",
+                    "children": []
+                },
+                {
+                    "name": "n",
+                    "children": []
+                }
+            ]
+        },
+        {
+            "name": "assert",
+            "children": []
+        },
+        {
+            "name": "n",
+            "children": []
+        },
+        {
             "value": "0",
             "type": "numeric",
             "children": []
         },
         {
-            "value": "1",
-            "type": "numeric",
+            "name": "n",
             "children": []
         },
         {
@@ -19,11 +38,56 @@
         {
             "value": "1",
             "type": "numeric",
+            "children": []
+        },
+        {
+            "name": "fibonacci",
+            "children": []
+        },
+        {
+            "name": "n",
+            "children": []
+        },
+        {
+            "value": "1",
+            "type": "numeric",
+            "children": []
+        },
+        {
+            "name": "fibonacci",
+            "children": []
+        },
+        {
+            "name": "n",
             "children": []
         },
         {
             "value": "2",
             "type": "numeric",
+            "children": []
+        },
+        {
+            "children": [
+                {
+                    "children": [
+                        {
+                            "name": "main",
+                            "children": []
+                        },
+                        {
+                            "name": "flag",
+                            "children": []
+                        }
+                    ]
+                },
+                {
+                    "name": "false",
+                    "children": []
+                }
+            ]
+        },
+        {
+            "name": "assert",
             "children": []
         },
         {
@@ -42,13 +106,65 @@
             "children": []
         },
         {
+            "children": [
+                {
+                    "name": "flag",
+                    "children": []
+                },
+                {
+                    "name": "true",
+                    "children": []
+                }
+            ]
+        },
+        {
+            "name": "std",
+            "children": []
+        },
+        {
+            "name": "io",
+            "children": []
+        },
+        {
+            "name": "print",
+            "children": []
+        },
+        {
             "value": "OKkkkk",
             "type": "string",
             "children": []
         },
         {
+            "name": "std",
+            "children": []
+        },
+        {
+            "name": "io",
+            "children": []
+        },
+        {
+            "name": "print",
+            "children": []
+        },
+        {
             "value": "Runtime error",
             "type": "string",
+            "children": []
+        },
+        {
+            "children": [
+                {
+                    "name": "flag",
+                    "children": []
+                },
+                {
+                    "name": "false",
+                    "children": []
+                }
+            ]
+        },
+        {
+            "name": "break",
             "children": []
         }
     ]

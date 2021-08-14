@@ -169,8 +169,6 @@ class Lexer
             char: $next_char
         );
 
-        // $full_current = $current . $next_char;
-
         if (
             $current !== ''
             && $next_char === '@'

@@ -4,6 +4,8 @@ namespace Fly50w\Parser\AST;
 
 class LiteralNode extends Node
 {
+    protected int $maxNodes = 0;
+
     public function __construct(
         public mixed $value,
         public string $type = ''
@@ -30,11 +32,5 @@ class LiteralNode extends Node
     public function getValue(): mixed
     {
         return $this->value;
-    }
-
-    public function addChildren(Node $node): Node
-    {
-        throw new \Exception("Cannot add children to LiteralNode");
-        return $this;
     }
 }
