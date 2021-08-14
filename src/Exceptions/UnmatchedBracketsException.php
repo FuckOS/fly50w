@@ -2,6 +2,8 @@
 
 namespace Fly50w\Exceptions;
 
-class UnmatchedBracketsException extends \Exception
+use SyntaxErrorException;
+
+class UnmatchedBracketsException extends SyntaxErrorException
 {
 }

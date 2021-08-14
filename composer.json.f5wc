@@ -1,0 +1,99 @@
+{
+    "filename": ".\/composer.json",
+    "children": [
+        {
+            "children": [
+                {
+                    "value": "name",
+                    "type": "string",
+                    "children": []
+                },
+                {
+                    "value": "xtlsoft\/fly50w",
+                    "type": "string",
+                    "children": []
+                },
+                {
+                    "value": "autoload",
+                    "type": "string",
+                    "children": []
+                },
+                {
+                    "value": "psr-4",
+                    "type": "string",
+                    "children": []
+                },
+                {
+                    "value": "Fly50w",
+                    "type": "string",
+                    "children": []
+                },
+                {
+                    "value": "src\/",
+                    "type": "string",
+                    "children": []
+                },
+                {
+                    "value": "authors",
+                    "type": "string",
+                    "children": []
+                },
+                {
+                    "value": "name",
+                    "type": "string",
+                    "children": []
+                },
+                {
+                    "value": "Tianle Xu",
+                    "type": "string",
+                    "children": []
+                },
+                {
+                    "value": "email",
+                    "type": "string",
+                    "children": []
+                },
+                {
+                    "value": "xtl@xtlsoft.top",
+                    "type": "string",
+                    "children": []
+                },
+                {
+                    "value": "require",
+                    "type": "string",
+                    "children": []
+                },
+                {
+                    "value": "php",
+                    "type": "string",
+                    "children": []
+                },
+                {
+                    "value": ">=8.0",
+                    "type": "string",
+                    "children": []
+                },
+                {
+                    "value": "league\/climate",
+                    "type": "string",
+                    "children": []
+                },
+                {
+                    "value": "^3.7",
+                    "type": "string",
+                    "children": []
+                },
+                {
+                    "value": "symfony\/yaml",
+                    "type": "string",
+                    "children": []
+                },
+                {
+                    "value": "^5.3",
+                    "type": "string",
+                    "children": []
+                }
+            ]
+        }
+    ]
+}
