@@ -5,12 +5,12 @@ namespace Fly50w\Parser\AST;
 class Node
 {
     protected ?Node $parent = null;
+    protected int $maxNodes = -1;
+    protected ?Scope $scope;
     /**
      * @var Node[]
      */
     public array $children = [];
-
-    protected int $maxNodes = -1;
 
     public function getParent(): ?Node
     {
@@ -20,6 +20,17 @@ class Node
     public function setParent(Node $parent): self
     {
         $this->parent = $parent;
+        return $this;
+    }
+
+    public function getScope(): ?Scope
+    {
+        return $this->scope;
+    }
+
+    public function setScope(Scope $scope): self
+    {
+        $this->scope = $scope;
         return $this;
     }
 

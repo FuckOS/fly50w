@@ -19,6 +19,7 @@ use Fly50w\Parser\AST\StatementNode;
 use Fly50w\Parser\AST\VariableNode;
 use Fly50w\Exceptions\SyntaxErrorException;
 use Fly50w\Parser\AST\Internal\LetFlagNode;
+use Fly50w\Parser\AST\Scope;
 
 class Parser
 {
@@ -186,6 +187,9 @@ class Parser
                                     $curr->popChild();
                                 }
                             }
+                            if ($curr instanceof FunctionNode) {
+                                $curr = $curr->getParent();
+                            }
                             break;
                         case ',':
                             if ($curr instanceof FunctionCallNode) {
@@ -213,5 +217,34 @@ class Parser
             }
         }
         return $root;
+    }
+
+    public function assignScope(Node $node, ?int $childId = null): Node
+    {
+        if ($node instanceof RootNode) {
+            $node->setScope(new Scope(''));
+        } else {
+            // if (
+            //     $childId !== null &&
+            //     ($node->getParent() instanceof FunctionNode)
+            // ) {
+            //     // TODO: add try catch for
+            //     $node->setScope(
+            //         $node->getParent()->getScope()->subScope('0')
+            //     );
+            // } else {
+            //     $node->setScope($node->getParent()->getScope());
+            // }
+            // TODO: add try catch for
+            if ($node instanceof FunctionNode) {
+                $node->setScope($node->getParent()->getScope()->subScope('0'));
+            } else {
+                $node->setScope($node->getParent()->getScope());
+            }
+        }
+        foreach ($node->getChildren() as $id => $child) {
+            $this->assignScope($child, $id);
+        }
+        return $node;
     }
 }

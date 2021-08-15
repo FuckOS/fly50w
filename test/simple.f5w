@@ -1,6 +1,9 @@
-let main = fn c, d {
+let main = fn (c, d) {
     let a = (1 + 2) * 5;
     let b = a * 3 + c;
     b = b - 1;
-    return b + c;
-}
+    print(b + d);
+    return b + d;
+};
+
+main(1, 2);

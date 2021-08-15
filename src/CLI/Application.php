@@ -5,6 +5,7 @@ namespace Fly50w\CLI;
 use Fly50w\Lexer\Lexer;
 use Fly50w\Parser\Parser;
 use Fly50w\Version;
+use Fly50w\VM\VM;
 use League\CLImate\CLImate;
 
 class Application
@@ -73,6 +74,61 @@ class Application
             return;
         }
         $flag = false;
+        if ($this->cli->arguments->defined('interactive')) {
+            $this->cli->out($this->head);
+            $this->cli->backgroundBlue()
+                ->white()->out('                                       ');
+            $this->cli->backgroundBlue()
+                ->white()->out('           Welcome to Fly50w           ');
+            $this->cli->backgroundBlue()
+                ->white()->out('                                       ');
+            $this->cli->br();
+            $input = 'main.f5w';
+            $output = 'main.f5w.f5wc';
+            while (true) {
+                $prompt = $this->cli->checkboxes(
+                    prompt: "<bold>=> <magenta>What would you like to do?</magenta></bold>",
+                    options: [
+                        'Compile a program',
+                        'Run a program',
+                        'Show help text',
+                        'Exit'
+                    ]
+                );
+                $in = $prompt->prompt();
+                if (in_array('Exit', $in)) {
+                    $this->cli->info('Bye.');
+                    return;
+                }
+                if (in_array('Show help text', $in)) {
+                    $this->cli->usage($argv);
+                }
+                if (in_array('Compile a program', $in)) {
+                    $this->cli->br()->out('<bold>== This is Fly50w compiler ==</bold>');
+                    $input = $this->cli
+                        ->input('<bold>=> <magenta>Input filename</magenta></bold> [' . $input . ']:')
+                        ->defaultTo($input)
+                        ->prompt();
+                    $output = $input . '.f5wc';
+                    $output = $this->cli
+                        ->input('<bold>=> <magenta>Output filename</magenta></bold> [' . $output . ']:')
+                        ->defaultTo($output)
+                        ->prompt();
+                    $this->cli->br()->info('Please wait... ');
+                    $this->doCompile($input, $output);
+                }
+                if (in_array('Run a program', $in)) {
+                    $this->cli->br()->out('<bold>== This is Fly50w VM ==</bold>');
+                    $output = $this->cli
+                        ->input('<bold>=> <magenta>Filename</magenta></bold> [' . $output . ']:')
+                        ->defaultTo($output)
+                        ->prompt();
+                    $this->doRun($output);
+                }
+                $this->cli->br();
+            }
+            return;
+        }
         if ($this->cli->arguments->defined('compile')) {
             $this->cli->out($this->head);
             $input = $this->cli->arguments->get('compile');
@@ -84,6 +140,8 @@ class Application
             $flag = true;
         }
         if ($this->cli->arguments->defined('run')) {
+            $output = $this->cli->arguments->get('run');
+            $this->doRun($output);
             $flag = true;
         }
         if (!$flag) {
@@ -91,15 +149,40 @@ class Application
         }
     }
 
-    function doCompile(string $input, string $output)
+    protected function doRun(string $output)
+    {
+        $vm = new VM();
+        if (!file_exists($output)) {
+            $this->cli->bold()->red()->backgroundYellow("No such file: $output");
+            if (!$this->cli->arguments->defined('interactive')) {
+                exit(1);
+            }
+            return;
+        }
+        $out = file_get_contents($output);
+        $ast = unserialize(gzdecode($out));
+        if (!$ast) {
+            $this->cli->bold()->red()->backgroundYellow("File format error: $output");
+            if (!$this->cli->arguments->defined('interactive')) {
+                exit(1);
+            }
+            return;
+        }
+        $vm->execute($ast);
+    }
+
+    protected function doCompile(string $input, string $output)
     {
         if (!file_exists($input)) {
             $this->cli->bold()->red()->backgroundYellow("No such file: $input");
-            exit(1);
+            if (!$this->cli->arguments->defined('interactive')) {
+                exit(1);
+            }
+            return;
         }
         if (file_exists($output) && (!$this->cli->arguments->defined('force'))) {
             $prompt = $this->cli->radio(
-                prompt: "<bold><red>[ERROR]</red></bold> File <bold><cyan>$output</cyan></bold>" .
+                prompt: "<bold><yellow>[WARNING]</yellow></bold> File <bold><cyan>$output</cyan></bold>" .
                     " already exists.\r\n<bold>=> <magenta>Overwrite?</magenta></bold>",
                 options: [
                     'Yes, overwrite please',
@@ -124,7 +207,10 @@ class Application
             $code = Merger::mergeFile($input, $this->cli);
         } catch (\Exception $e) {
             $this->cli->out($e->getMessage());
-            exit(1);
+            if (!$this->cli->arguments->defined('interactive')) {
+                exit(1);
+            }
+            return;
         }
 
         $l_number = Merger::getLineNumber($code);
@@ -140,18 +226,19 @@ class Application
         }
 
         $this->cli->info("Lexing code... ");
-
         $bare_tokens = $lexer->tokenize($code);
         $tokens = $lexer->standardize($bare_tokens);
 
         $this->cli->info("Parsing code... ");
-
         $ast = $parser->parse($tokens, $input);
+
+        $this->cli->info("Analyzing AST scope relationship... ");
+        $ast = $parser->assignScope($ast);
 
         $this->cli->info("Generating fly50vm recognizable instructions...");
         // sleep(1);
-        // file_put_contents($output, gzencode(serialize($ast), 9));
-        file_put_contents($output, @var_export($ast, true));
+        file_put_contents($output, gzencode(serialize($ast), 9));
+        // file_put_contents($output, @var_export($ast, true));
         $this->cli->br();
 
         $this->cli->out(
