@@ -33,6 +33,34 @@ class Node
         return $this;
     }
 
+    /**
+     * Add children
+     *
+     * @param Node[] $nodes
+     * @return self
+     */
+    public function addChildren(array $nodes): self
+    {
+        $this->children = array_merge($this->children, $nodes);
+        return $this;
+    }
+
+    public function purgeChildren(string $type = null): array
+    {
+        $i = 0;
+        if ($type === null) {
+            $i = 0;
+        } else foreach ($this->children as $k => $v) {
+            if (!($v instanceof $type)) {
+                $i = $k;
+                break;
+            }
+        }
+        $children = array_slice($this->children, 0, $i);
+        $this->children = array_slice($this->children, $i);
+        return $children;
+    }
+
     public function getChildren(): array
     {
         return $this->children;
@@ -44,6 +72,16 @@ class Node
             $top = count($this->children) - 1;
             $child = $this->children[$top];
             unset($this->children[$top]);
+            return $child;
+        } else {
+            return null;
+        }
+    }
+
+    public function getTopChild(): ?Node
+    {
+        if (count($this->children) > 0) {
+            $child = $this->children[count($this->children) - 1];
             return $child;
         } else {
             return null;

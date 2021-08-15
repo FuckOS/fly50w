@@ -1,171 +1,508 @@
-{
-    "filename": "test\/testfile.f5w",
-    "children": [
-        {
-            "children": [
-                {
-                    "name": "fibonacci",
-                    "children": []
-                },
-                {
-                    "name": "n",
-                    "children": []
-                }
-            ]
-        },
-        {
-            "name": "assert",
-            "children": []
-        },
-        {
-            "name": "n",
-            "children": []
-        },
-        {
-            "value": "0",
-            "type": "numeric",
-            "children": []
-        },
-        {
-            "name": "n",
-            "children": []
-        },
-        {
-            "value": "1",
-            "type": "numeric",
-            "children": []
-        },
-        {
-            "value": "1",
-            "type": "numeric",
-            "children": []
-        },
-        {
-            "name": "fibonacci",
-            "children": []
-        },
-        {
-            "name": "n",
-            "children": []
-        },
-        {
-            "value": "1",
-            "type": "numeric",
-            "children": []
-        },
-        {
-            "name": "fibonacci",
-            "children": []
-        },
-        {
-            "name": "n",
-            "children": []
-        },
-        {
-            "value": "2",
-            "type": "numeric",
-            "children": []
-        },
-        {
-            "children": [
-                {
-                    "children": [
-                        {
-                            "name": "main",
-                            "children": []
-                        },
-                        {
-                            "name": "flag",
-                            "children": []
-                        }
-                    ]
-                },
-                {
-                    "name": "false",
-                    "children": []
-                }
-            ]
-        },
-        {
-            "name": "assert",
-            "children": []
-        },
-        {
-            "value": "1",
-            "type": "numeric",
-            "children": []
-        },
-        {
-            "value": "2",
-            "type": "numeric",
-            "children": []
-        },
-        {
-            "value": "4",
-            "type": "numeric",
-            "children": []
-        },
-        {
-            "children": [
-                {
-                    "name": "flag",
-                    "children": []
-                },
-                {
-                    "name": "true",
-                    "children": []
-                }
-            ]
-        },
-        {
-            "name": "std",
-            "children": []
-        },
-        {
-            "name": "io",
-            "children": []
-        },
-        {
-            "name": "print",
-            "children": []
-        },
-        {
-            "value": "OKkkkk",
-            "type": "string",
-            "children": []
-        },
-        {
-            "name": "std",
-            "children": []
-        },
-        {
-            "name": "io",
-            "children": []
-        },
-        {
-            "name": "print",
-            "children": []
-        },
-        {
-            "value": "Runtime error",
-            "type": "string",
-            "children": []
-        },
-        {
-            "children": [
-                {
-                    "name": "flag",
-                    "children": []
-                },
-                {
-                    "name": "false",
-                    "children": []
-                }
-            ]
-        },
-        {
-            "name": "break",
-            "children": []
-        }
-    ]
-}
+Fly50w\Parser\AST\RootNode::__set_state(array(
+   'filename' => './test/testfile.f5w',
+   'parent' => NULL,
+   'children' => 
+  array (
+    0 => 
+    Fly50w\Parser\AST\AssignNode::__set_state(array(
+       'maxNodes' => 2,
+       'parent' => NULL,
+       'children' => 
+      array (
+        0 => 
+        Fly50w\Parser\AST\VariableNode::__set_state(array(
+           'maxNodes' => 0,
+           'name' => 'fibonacci',
+           'parent' => NULL,
+           'children' => 
+          array (
+          ),
+        )),
+        1 => 
+        Fly50w\Parser\AST\FunctionNode::__set_state(array(
+           'params' => 
+          array (
+          ),
+           '_in_param' => false,
+           'parent' => NULL,
+           'children' => 
+          array (
+            0 => 
+            Fly50w\Parser\AST\StatementNode::__set_state(array(
+               'parent' => NULL,
+               'children' => 
+              array (
+                0 => 
+                Fly50w\Parser\AST\StatementNode::__set_state(array(
+                   'parent' => NULL,
+                   'children' => 
+                  array (
+                    0 => 
+                    Fly50w\Parser\AST\StatementNode::__set_state(array(
+                       'parent' => NULL,
+                       'children' => 
+                      array (
+                        0 => 
+                        Fly50w\Parser\AST\StatementNode::__set_state(array(
+                           'parent' => NULL,
+                           'children' => 
+                          array (
+                            0 => 
+                            Fly50w\Parser\AST\VariableNode::__set_state(array(
+                               'maxNodes' => 0,
+                               'name' => 'n',
+                               'parent' => NULL,
+                               'children' => 
+                              array (
+                              ),
+                            )),
+                            1 => 
+                            Fly50w\Parser\AST\VariableNode::__set_state(array(
+                               'maxNodes' => 0,
+                               'name' => 'assert',
+                               'parent' => NULL,
+                               'children' => 
+                              array (
+                              ),
+                            )),
+                            2 => 
+                            Fly50w\Parser\AST\VariableNode::__set_state(array(
+                               'maxNodes' => 0,
+                               'name' => 'n',
+                               'parent' => NULL,
+                               'children' => 
+                              array (
+                              ),
+                            )),
+                            3 => 
+                            Fly50w\Parser\AST\LiteralNode::__set_state(array(
+                               'maxNodes' => 0,
+                               'value' => '0',
+                               'type' => 'numeric',
+                               'parent' => NULL,
+                               'children' => 
+                              array (
+                              ),
+                            )),
+                            4 => 
+                            Fly50w\Parser\AST\VariableNode::__set_state(array(
+                               'maxNodes' => 0,
+                               'name' => 'n',
+                               'parent' => NULL,
+                               'children' => 
+                              array (
+                              ),
+                            )),
+                            5 => 
+                            Fly50w\Parser\AST\LiteralNode::__set_state(array(
+                               'maxNodes' => 0,
+                               'value' => '1',
+                               'type' => 'numeric',
+                               'parent' => NULL,
+                               'children' => 
+                              array (
+                              ),
+                            )),
+                            6 => 
+                            Fly50w\Parser\AST\LiteralNode::__set_state(array(
+                               'maxNodes' => 0,
+                               'value' => '1',
+                               'type' => 'numeric',
+                               'parent' => NULL,
+                               'children' => 
+                              array (
+                              ),
+                            )),
+                            7 => 
+                            Fly50w\Parser\AST\VariableNode::__set_state(array(
+                               'maxNodes' => 0,
+                               'name' => 'fibonacci',
+                               'parent' => NULL,
+                               'children' => 
+                              array (
+                              ),
+                            )),
+                            8 => 
+                            Fly50w\Parser\AST\VariableNode::__set_state(array(
+                               'maxNodes' => 0,
+                               'name' => 'n',
+                               'parent' => NULL,
+                               'children' => 
+                              array (
+                              ),
+                            )),
+                            9 => 
+                            Fly50w\Parser\AST\LiteralNode::__set_state(array(
+                               'maxNodes' => 0,
+                               'value' => '1',
+                               'type' => 'numeric',
+                               'parent' => NULL,
+                               'children' => 
+                              array (
+                              ),
+                            )),
+                            10 => 
+                            Fly50w\Parser\AST\VariableNode::__set_state(array(
+                               'maxNodes' => 0,
+                               'name' => 'fibonacci',
+                               'parent' => NULL,
+                               'children' => 
+                              array (
+                              ),
+                            )),
+                            11 => 
+                            Fly50w\Parser\AST\VariableNode::__set_state(array(
+                               'maxNodes' => 0,
+                               'name' => 'n',
+                               'parent' => NULL,
+                               'children' => 
+                              array (
+                              ),
+                            )),
+                            12 => 
+                            Fly50w\Parser\AST\LiteralNode::__set_state(array(
+                               'maxNodes' => 0,
+                               'value' => '2',
+                               'type' => 'numeric',
+                               'parent' => NULL,
+                               'children' => 
+                              array (
+                              ),
+                            )),
+                            13 => 
+                            Fly50w\Parser\AST\AssignNode::__set_state(array(
+                               'maxNodes' => 2,
+                               'parent' => NULL,
+                               'children' => 
+                              array (
+                                0 => 
+                                Fly50w\Parser\AST\VariableNode::__set_state(array(
+                                   'maxNodes' => 0,
+                                   'name' => 'main',
+                                   'parent' => NULL,
+                                   'children' => 
+                                  array (
+                                  ),
+                                )),
+                                1 => 
+                                Fly50w\Parser\AST\FunctionNode::__set_state(array(
+                                   'params' => 
+                                  array (
+                                  ),
+                                   '_in_param' => false,
+                                   'parent' => NULL,
+                                   'children' => 
+                                  array (
+                                    0 => 
+                                    Fly50w\Parser\AST\StatementNode::__set_state(array(
+                                       'parent' => NULL,
+                                       'children' => 
+                                      array (
+                                        0 => 
+                                        Fly50w\Parser\AST\StatementNode::__set_state(array(
+                                           'parent' => NULL,
+                                           'children' => 
+                                          array (
+                                            0 => 
+                                            Fly50w\Parser\AST\StatementNode::__set_state(array(
+                                               'parent' => NULL,
+                                               'children' => 
+                                              array (
+                                                0 => 
+                                                Fly50w\Parser\AST\StatementNode::__set_state(array(
+                                                   'parent' => NULL,
+                                                   'children' => 
+                                                  array (
+                                                    0 => 
+                                                    Fly50w\Parser\AST\StatementNode::__set_state(array(
+                                                       'parent' => NULL,
+                                                       'children' => 
+                                                      array (
+                                                        0 => 
+                                                        Fly50w\Parser\AST\StatementNode::__set_state(array(
+                                                           'parent' => NULL,
+                                                           'children' => 
+                                                          array (
+                                                            0 => 
+                                                            Fly50w\Parser\AST\StatementNode::__set_state(array(
+                                                               'parent' => NULL,
+                                                               'children' => 
+                                                              array (
+                                                                0 => 
+                                                                Fly50w\Parser\AST\StatementNode::__set_state(array(
+                                                                   'parent' => NULL,
+                                                                   'children' => 
+                                                                  array (
+                                                                    0 => 
+                                                                    Fly50w\Parser\AST\StatementNode::__set_state(array(
+                                                                       'parent' => NULL,
+                                                                       'children' => 
+                                                                      array (
+                                                                        0 => 
+                                                                        Fly50w\Parser\AST\StatementNode::__set_state(array(
+                                                                           'parent' => NULL,
+                                                                           'children' => 
+                                                                          array (
+                                                                            0 => 
+                                                                            Fly50w\Parser\AST\StatementNode::__set_state(array(
+                                                                               'parent' => NULL,
+                                                                               'children' => 
+                                                                              array (
+                                                                                0 => 
+                                                                                Fly50w\Parser\AST\AssignNode::__set_state(array(
+                                                                                   'maxNodes' => 2,
+                                                                                   'parent' => NULL,
+                                                                                   'children' => 
+                                                                                  array (
+                                                                                    0 => 
+                                                                                    Fly50w\Parser\AST\VariableNode::__set_state(array(
+                                                                                       'maxNodes' => 0,
+                                                                                       'name' => 'flag',
+                                                                                       'parent' => NULL,
+                                                                                       'children' => 
+                                                                                      array (
+                                                                                      ),
+                                                                                    )),
+                                                                                    1 => 
+                                                                                    Fly50w\Parser\AST\VariableNode::__set_state(array(
+                                                                                       'maxNodes' => 0,
+                                                                                       'name' => 'false',
+                                                                                       'parent' => NULL,
+                                                                                       'children' => 
+                                                                                      array (
+                                                                                      ),
+                                                                                    )),
+                                                                                  ),
+                                                                                )),
+                                                                                1 => 
+                                                                                Fly50w\Parser\AST\VariableNode::__set_state(array(
+                                                                                   'maxNodes' => 0,
+                                                                                   'name' => 'assert',
+                                                                                   'parent' => NULL,
+                                                                                   'children' => 
+                                                                                  array (
+                                                                                  ),
+                                                                                )),
+                                                                                2 => 
+                                                                                Fly50w\Parser\AST\LiteralNode::__set_state(array(
+                                                                                   'maxNodes' => 0,
+                                                                                   'value' => '1',
+                                                                                   'type' => 'numeric',
+                                                                                   'parent' => NULL,
+                                                                                   'children' => 
+                                                                                  array (
+                                                                                  ),
+                                                                                )),
+                                                                                3 => 
+                                                                                Fly50w\Parser\AST\LiteralNode::__set_state(array(
+                                                                                   'maxNodes' => 0,
+                                                                                   'value' => '2',
+                                                                                   'type' => 'numeric',
+                                                                                   'parent' => NULL,
+                                                                                   'children' => 
+                                                                                  array (
+                                                                                  ),
+                                                                                )),
+                                                                                4 => 
+                                                                                Fly50w\Parser\AST\LiteralNode::__set_state(array(
+                                                                                   'maxNodes' => 0,
+                                                                                   'value' => '4',
+                                                                                   'type' => 'numeric',
+                                                                                   'parent' => NULL,
+                                                                                   'children' => 
+                                                                                  array (
+                                                                                  ),
+                                                                                )),
+                                                                                5 => 
+                                                                                Fly50w\Parser\AST\AssignNode::__set_state(array(
+                                                                                   'maxNodes' => 2,
+                                                                                   'parent' => NULL,
+                                                                                   'children' => 
+                                                                                  array (
+                                                                                    0 => 
+                                                                                    Fly50w\Parser\AST\VariableNode::__set_state(array(
+                                                                                       'maxNodes' => 0,
+                                                                                       'name' => 'flag',
+                                                                                       'parent' => NULL,
+                                                                                       'children' => 
+                                                                                      array (
+                                                                                      ),
+                                                                                    )),
+                                                                                    1 => 
+                                                                                    Fly50w\Parser\AST\VariableNode::__set_state(array(
+                                                                                       'maxNodes' => 0,
+                                                                                       'name' => 'true',
+                                                                                       'parent' => NULL,
+                                                                                       'children' => 
+                                                                                      array (
+                                                                                      ),
+                                                                                    )),
+                                                                                  ),
+                                                                                )),
+                                                                                6 => 
+                                                                                Fly50w\Parser\AST\VariableNode::__set_state(array(
+                                                                                   'maxNodes' => 0,
+                                                                                   'name' => 'std',
+                                                                                   'parent' => NULL,
+                                                                                   'children' => 
+                                                                                  array (
+                                                                                  ),
+                                                                                )),
+                                                                                7 => 
+                                                                                Fly50w\Parser\AST\VariableNode::__set_state(array(
+                                                                                   'maxNodes' => 0,
+                                                                                   'name' => 'io',
+                                                                                   'parent' => NULL,
+                                                                                   'children' => 
+                                                                                  array (
+                                                                                  ),
+                                                                                )),
+                                                                                8 => 
+                                                                                Fly50w\Parser\AST\VariableNode::__set_state(array(
+                                                                                   'maxNodes' => 0,
+                                                                                   'name' => 'print',
+                                                                                   'parent' => NULL,
+                                                                                   'children' => 
+                                                                                  array (
+                                                                                  ),
+                                                                                )),
+                                                                                9 => 
+                                                                                Fly50w\Parser\AST\LiteralNode::__set_state(array(
+                                                                                   'maxNodes' => 0,
+                                                                                   'value' => 'OKkkkk',
+                                                                                   'type' => 'string',
+                                                                                   'parent' => NULL,
+                                                                                   'children' => 
+                                                                                  array (
+                                                                                  ),
+                                                                                )),
+                                                                                10 => 
+                                                                                Fly50w\Parser\AST\VariableNode::__set_state(array(
+                                                                                   'maxNodes' => 0,
+                                                                                   'name' => 'std',
+                                                                                   'parent' => NULL,
+                                                                                   'children' => 
+                                                                                  array (
+                                                                                  ),
+                                                                                )),
+                                                                                11 => 
+                                                                                Fly50w\Parser\AST\VariableNode::__set_state(array(
+                                                                                   'maxNodes' => 0,
+                                                                                   'name' => 'io',
+                                                                                   'parent' => NULL,
+                                                                                   'children' => 
+                                                                                  array (
+                                                                                  ),
+                                                                                )),
+                                                                                12 => 
+                                                                                Fly50w\Parser\AST\VariableNode::__set_state(array(
+                                                                                   'maxNodes' => 0,
+                                                                                   'name' => 'print',
+                                                                                   'parent' => NULL,
+                                                                                   'children' => 
+                                                                                  array (
+                                                                                  ),
+                                                                                )),
+                                                                                13 => 
+                                                                                Fly50w\Parser\AST\LiteralNode::__set_state(array(
+                                                                                   'maxNodes' => 0,
+                                                                                   'value' => 'Runtime error',
+                                                                                   'type' => 'string',
+                                                                                   'parent' => NULL,
+                                                                                   'children' => 
+                                                                                  array (
+                                                                                  ),
+                                                                                )),
+                                                                                14 => 
+                                                                                Fly50w\Parser\AST\AssignNode::__set_state(array(
+                                                                                   'maxNodes' => 2,
+                                                                                   'parent' => NULL,
+                                                                                   'children' => 
+                                                                                  array (
+                                                                                    0 => 
+                                                                                    Fly50w\Parser\AST\VariableNode::__set_state(array(
+                                                                                       'maxNodes' => 0,
+                                                                                       'name' => 'flag',
+                                                                                       'parent' => NULL,
+                                                                                       'children' => 
+                                                                                      array (
+                                                                                      ),
+                                                                                    )),
+                                                                                    1 => 
+                                                                                    Fly50w\Parser\AST\VariableNode::__set_state(array(
+                                                                                       'maxNodes' => 0,
+                                                                                       'name' => 'false',
+                                                                                       'parent' => NULL,
+                                                                                       'children' => 
+                                                                                      array (
+                                                                                      ),
+                                                                                    )),
+                                                                                  ),
+                                                                                )),
+                                                                                15 => 
+                                                                                Fly50w\Parser\AST\VariableNode::__set_state(array(
+                                                                                   'maxNodes' => 0,
+                                                                                   'name' => 'break',
+                                                                                   'parent' => NULL,
+                                                                                   'children' => 
+                                                                                  array (
+                                                                                  ),
+                                                                                )),
+                                                                              ),
+                                                                               'maxNodes' => -1,
+                                                                            )),
+                                                                          ),
+                                                                           'maxNodes' => -1,
+                                                                        )),
+                                                                      ),
+                                                                       'maxNodes' => -1,
+                                                                    )),
+                                                                  ),
+                                                                   'maxNodes' => -1,
+                                                                )),
+                                                              ),
+                                                               'maxNodes' => -1,
+                                                            )),
+                                                          ),
+                                                           'maxNodes' => -1,
+                                                        )),
+                                                      ),
+                                                       'maxNodes' => -1,
+                                                    )),
+                                                  ),
+                                                   'maxNodes' => -1,
+                                                )),
+                                              ),
+                                               'maxNodes' => -1,
+                                            )),
+                                          ),
+                                           'maxNodes' => -1,
+                                        )),
+                                      ),
+                                       'maxNodes' => -1,
+                                    )),
+                                  ),
+                                   'maxNodes' => -1,
+                                )),
+                              ),
+                            )),
+                          ),
+                           'maxNodes' => -1,
+                        )),
+                      ),
+                       'maxNodes' => -1,
+                    )),
+                  ),
+                   'maxNodes' => -1,
+                )),
+              ),
+               'maxNodes' => -1,
+            )),
+          ),
+           'maxNodes' => -1,
+        )),
+      ),
+    )),
+  ),
+   'maxNodes' => -1,
+))

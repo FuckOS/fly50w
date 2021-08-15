@@ -150,7 +150,7 @@ class Application
 
         $this->cli->info("Generating fly50vm recognizable instructions...");
         // sleep(1);
-        file_put_contents($output, json_encode($ast, \JSON_PRETTY_PRINT));
+        file_put_contents($output, serialize($ast));
         $this->cli->br();
 
         $this->cli->out(

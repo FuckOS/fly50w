@@ -2,7 +2,7 @@
 
 namespace Fly50w\Parser\AST;
 
-class LiteralNode extends Node
+class LiteralNode extends ExpressionNode
 {
     protected int $maxNodes = 0;
 

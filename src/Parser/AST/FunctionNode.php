@@ -2,7 +2,7 @@
 
 namespace Fly50w\Parser\AST;
 
-class FunctionNode extends Node
+class FunctionNode extends ExpressionNode
 {
     public array $params = [];
     public bool $_in_param = false;
