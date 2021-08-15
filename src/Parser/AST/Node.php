@@ -56,9 +56,14 @@ class Node
                 break;
             }
         }
-        $children = array_slice($this->children, 0, $i);
-        $this->children = array_slice($this->children, $i);
+        $children = array_slice($this->children, $i);
+        $this->children = array_slice($this->children, 0, $i);
         return $children;
+    }
+
+    public function isEmpty(): bool
+    {
+        return count($this->children) == 0;
     }
 
     public function getChildren(): array
@@ -86,6 +91,20 @@ class Node
         } else {
             return null;
         }
+    }
+
+    public function getBottomChild(): ?Node
+    {
+        if (count($this->children) > 0) {
+            return $this->children[0];
+        } else {
+            return null;
+        }
+    }
+
+    public function countChildren(): int
+    {
+        return count($this->children);
     }
 
     public function isFull(): bool

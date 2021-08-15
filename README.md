@@ -29,3 +29,15 @@ Now you've installed all the dependencies on your machine. You can simply run:
 ```
 
 To see the help message.
+
+## Examples
+
+You can see 'test/' folder.
+
+## About
+
+This project uses many black magics for PHP.
+
+I even heavily used 'goto' in the project.
+
+The project is fully type annotated. You can use tools like Psalm to check.

@@ -4,6 +4,11 @@ namespace Fly50w\Parser\AST;
 
 class FunctionNode extends ExpressionNode
 {
+    /**
+     * Params
+     *
+     * @var string[]
+     */
     public array $params = [];
     public bool $_in_param = false;
 
@@ -11,12 +16,17 @@ class FunctionNode extends ExpressionNode
     {
     }
 
+    /**
+     * Get params
+     *
+     * @return string[]
+     */
     public function getParams(): array
     {
         return $this->params;
     }
 
-    public function addParam($name): self
+    public function addParam(string $name): self
     {
         $this->params[] = $name;
         return $this;

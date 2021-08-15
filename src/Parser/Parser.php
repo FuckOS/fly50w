@@ -2,21 +2,23 @@
 
 namespace Fly50w\Parser;
 
-use Exception;
 use Fly50w\Exceptions\UnmatchedBracketsException;
 use Fly50w\Lexer\Token;
 use Fly50w\Parser\AST\ArgumentNode;
 use Fly50w\Parser\AST\AssignNode;
 use Fly50w\Parser\AST\BraceExpressionNode;
-use Fly50w\Parser\AST\ExpressionNode;
+use Fly50w\Parser\AST\BreakNode;
 use Fly50w\Parser\AST\FunctionCallNode;
 use Fly50w\Parser\AST\FunctionNode;
 use Fly50w\Parser\AST\LiteralNode;
 use Fly50w\Parser\AST\Node;
 use Fly50w\Parser\AST\OperatorNode;
+use Fly50w\Parser\AST\ReturnNode;
 use Fly50w\Parser\AST\RootNode;
 use Fly50w\Parser\AST\StatementNode;
 use Fly50w\Parser\AST\VariableNode;
+use Fly50w\Exceptions\SyntaxErrorException;
+use Fly50w\Parser\AST\Internal\LetFlagNode;
 
 class Parser
 {
@@ -61,13 +63,40 @@ class Parser
                             $curr = $fn;
                             $curr->_in_param = true;
                             break;
+                        case 'return':
+                            if (!$curr instanceof StatementNode || !$curr->isEmpty()) {
+                                throw new SyntaxErrorException('Return should be an independent expression');
+                            }
+                            $rn = new ReturnNode();
+                            $curr->addChild($rn);
+                            $curr = $rn;
+                            break;
+                        case 'break':
+                            if (!$curr instanceof StatementNode || !$curr->isEmpty()) {
+                                throw new SyntaxErrorException('Break should be an independent expression');
+                            }
+                            $bn = new BreakNode();
+                            $curr->addChild($bn);
+                            $curr = $bn;
+                            break;
+                        case 'let':
+                            $curr->addChild(new LetFlagNode());
+                            break;
                     }
                     break;
                 case Token::T_SYMBOL:
                     switch ($token->value) {
                         case '=':
                             $prev = $curr->popChild();
-                            $an = new AssignNode();
+                            $let_mark = false;
+                            if (!$curr->isEmpty()) {
+                                $child = $curr->getTopChild();
+                                if ($child instanceof LetFlagNode) {
+                                    $curr->popChild();
+                                    $let_mark = true;
+                                }
+                            }
+                            $an = new AssignNode($let_mark);
                             $curr->addChild($an);
                             $curr = $an;
                             $curr->addChild($prev);
@@ -120,7 +149,7 @@ class Parser
                                 $curr = $curr->getParent();
                             }
                             if ($curr instanceof FunctionNode && $curr->_in_param) {
-                                $curr->_in_param = false;
+                                // $curr->_in_param = false;
                                 break;
                             }
                             if (
@@ -136,16 +165,47 @@ class Parser
                             if ($curr instanceof FunctionNode) {
                                 if ($curr->_in_param) {
                                     $curr->_in_param = false;
+                                    goto END_PARAM;
                                 }
+                                BRACKET_RECALL:
+                                $sn = new StatementNode();
+                                $curr->addChild($sn);
+                                $curr = $sn;
                                 // TODO: finish this
                             }
                             // TODO: finish this
+                            break;
+                        case '}':
+                            $last = $brackets->pop();
+                            if ($last != '{') {
+                                throw new UnmatchedBracketsException();
+                            }
+                            if ($curr instanceof StatementNode) {
+                                $curr = $curr->getParent();
+                                if ($curr->getTopChild()->isEmpty()) {
+                                    $curr->popChild();
+                                }
+                            }
                             break;
                         case ',':
                             if ($curr instanceof FunctionCallNode) {
                                 $curr = (new ArgumentNode())->addChildren($curr->purgeChildren())->setParent($curr);
                                 $curr->getParent()->addChild($curr);
                                 break;
+                            }
+                            if ($curr instanceof FunctionNode) {
+                                if ($curr->_in_param) {
+                                    END_PARAM:
+                                    $children = $curr->purgeChildren();
+                                    if (count($children) != 1 || !($children[0] instanceof VariableNode)) {
+                                        throw new SyntaxErrorException("Expected ',' received T_EXPR");
+                                    }
+                                    $curr->addParam($children[0]->getName());
+                                    if (!$curr->_in_param) {
+                                        goto BRACKET_RECALL;
+                                    }
+                                    break;
+                                }
                             }
                             break;
                     }
