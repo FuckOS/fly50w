@@ -7,6 +7,7 @@ use Fly50w\Exceptions\InvalidASTException;
 use Fly50w\Parser\AST\AssignNode;
 use Fly50w\Parser\AST\BraceExpressionNode;
 use Fly50w\Parser\AST\BreakNode;
+use Fly50w\Parser\AST\ForNode;
 use Fly50w\Parser\AST\FunctionCallNode;
 use Fly50w\Parser\AST\FunctionNode;
 use Fly50w\Parser\AST\LiteralNode;
@@ -144,6 +145,9 @@ class VM
                 $args[] = $this->runNode($child);
             }
             return $func($args, $this);
+        }
+        if ($node instanceof ForNode) {
+            return $node;
         }
         return null;
     }

@@ -2,28 +2,26 @@
 
 namespace Fly50w\Parser;
 
-use Fly50w\Exceptions\UnmatchedBracketsException;
 use Fly50w\Lexer\Token;
+use Fly50w\Lexer\Scalar;
+use Fly50w\Parser\AST\Node;
+use Fly50w\Parser\AST\Scope;
+use Fly50w\Parser\AST\RootNode;
+use Fly50w\Parser\AST\BraceExpressionNode;
+use Fly50w\Parser\AST\LiteralNode;
+use Fly50w\Parser\AST\FunctionCallNode;
+use Fly50w\Parser\AST\ForNode;
 use Fly50w\Parser\AST\ArgumentNode;
 use Fly50w\Parser\AST\AssignNode;
-use Fly50w\Parser\AST\BraceExpressionNode;
 use Fly50w\Parser\AST\BreakNode;
-use Fly50w\Parser\AST\FunctionCallNode;
 use Fly50w\Parser\AST\FunctionNode;
-use Fly50w\Parser\AST\LiteralNode;
-use Fly50w\Parser\AST\Node;
 use Fly50w\Parser\AST\OperatorNode;
 use Fly50w\Parser\AST\ReturnNode;
-use Fly50w\Parser\AST\RootNode;
 use Fly50w\Parser\AST\StatementNode;
 use Fly50w\Parser\AST\VariableNode;
-use Fly50w\Exceptions\SyntaxErrorException;
-use Fly50w\Lexer\Scalar;
-use Fly50w\Parser\AST\ForNode;
 use Fly50w\Parser\AST\Internal\LetFlagNode;
-use Fly50w\Parser\AST\Scope;
-use League\CLImate\Decorator\Component\Format;
-use Symfony\Component\VarDumper\VarDumper;
+use Fly50w\Exceptions\SyntaxErrorException;
+use Fly50w\Exceptions\UnmatchedBracketsException;
 
 class Parser
 {
