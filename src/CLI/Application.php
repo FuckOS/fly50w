@@ -91,6 +91,7 @@ class Application
                     options: [
                         'Compile a program',
                         'Run a program',
+                        'Run REPL',
                         'Show help text',
                         'Exit'
                     ]
@@ -124,6 +125,10 @@ class Application
                         ->defaultTo($output)
                         ->prompt();
                     $this->doRun($output);
+                }
+                if (in_array('Run REPL', $in)) {
+                    $this->cli->br()->out('Fly50w REPL');
+                    (new REPL)->loop();
                 }
                 $this->cli->br();
             }
@@ -161,6 +166,7 @@ class Application
         }
         $out = file_get_contents($output);
         $ast = unserialize(gzdecode($out));
+        // $ast = unserialize($out);
         if (!$ast) {
             $this->cli->bold()->red()->backgroundYellow("File format error: $output");
             if (!$this->cli->arguments->defined('interactive')) {
@@ -237,8 +243,8 @@ class Application
 
         $this->cli->info("Generating fly50vm recognizable instructions...");
         // sleep(1);
-        file_put_contents($output, gzencode(serialize($ast), 9));
-        // file_put_contents($output, @var_export($ast, true));
+        // file_put_contents($output, gzencode(serialize($ast), 9));
+        file_put_contents($output, @var_export($ast, true));
         $this->cli->br();
 
         $this->cli->out(

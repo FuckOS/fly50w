@@ -35,6 +35,9 @@ class Merger
 
     protected static function getFile(string $filename): string
     {
+        if (substr($filename, 0, 3) == '**$') {
+            return substr($filename, 3);
+        }
         if (!file_exists($filename)) {
             throw new \Exception("<red><bold>Import file not found:</bold></red> $filename");
         }

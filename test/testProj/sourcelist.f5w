@@ -1,0 +1,4 @@
+!import 50w.f5w
+!import src/main.f5w
+
+main(0, null);

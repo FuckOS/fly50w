@@ -18,8 +18,12 @@ use Fly50w\Parser\AST\RootNode;
 use Fly50w\Parser\AST\StatementNode;
 use Fly50w\Parser\AST\VariableNode;
 use Fly50w\Exceptions\SyntaxErrorException;
+use Fly50w\Lexer\Scalar;
+use Fly50w\Parser\AST\ForNode;
 use Fly50w\Parser\AST\Internal\LetFlagNode;
 use Fly50w\Parser\AST\Scope;
+use League\CLImate\Decorator\Component\Format;
+use Symfony\Component\VarDumper\VarDumper;
 
 class Parser
 {
@@ -48,8 +52,23 @@ class Parser
             // }
             switch ($token->type) {
                 case Token::T_SCALAR:
+                    $value = $token->scalar->value;
+                    switch ($token->scalar->type) {
+                        case Scalar::T_NUMERIC:
+                            $value = $value + 0;
+                            break;
+                        case Scalar::T_STR:
+                            $value = "$value";
+                            break;
+                        case Scalar::T_NULL:
+                            $value = null;
+                            break;
+                        case Scalar::T_BOOL:
+                            $value = "true" == strtolower($value);
+                            break;
+                    }
                     $curr->addChild(new LiteralNode(
-                        value: $token->scalar->value,
+                        value: $value,
                         type: $token->scalar->type
                     ));
                     break;
@@ -63,6 +82,11 @@ class Parser
                             $curr->addChild($fn);
                             $curr = $fn;
                             $curr->_in_param = true;
+                            break;
+                        case 'for':
+                            $fn = new ForNode();
+                            $curr->addChild($fn);
+                            $curr = $fn;
                             break;
                         case 'return':
                             if (!$curr instanceof StatementNode || !$curr->isEmpty()) {
@@ -107,6 +131,8 @@ class Parser
                         case '*':
                         case '/':
                         case '%':
+                        case '..':
+                        case '**':
                             $curr = (new OperatorNode($token->value))->addChild($curr->popChild())->setParent($curr);
                             $curr->getParent()->addChild($curr);
                             break;
@@ -174,6 +200,11 @@ class Parser
                                 $curr = $sn;
                                 // TODO: finish this
                             }
+                            if ($curr instanceof ForNode) {
+                                $sn = new StatementNode();
+                                $curr->addChild($sn);
+                                $curr = $sn;
+                            }
                             // TODO: finish this
                             break;
                         case '}':
@@ -190,6 +221,9 @@ class Parser
                             if ($curr instanceof FunctionNode) {
                                 $curr = $curr->getParent();
                             }
+                            if ($curr instanceof ForNode) {
+                                $curr = $curr->getParent();
+                            }
                             break;
                         case ',':
                             if ($curr instanceof FunctionCallNode) {
@@ -201,10 +235,12 @@ class Parser
                                 if ($curr->_in_param) {
                                     END_PARAM:
                                     $children = $curr->purgeChildren();
-                                    if (count($children) != 1 || !($children[0] instanceof VariableNode)) {
-                                        throw new SyntaxErrorException("Expected ',' received T_EXPR");
+                                    if (count($children) > 0) {
+                                        if (count($children) != 1 || !($children[0] instanceof VariableNode)) {
+                                            throw new SyntaxErrorException("Expected ',' received T_EXPR");
+                                        }
+                                        $curr->addParam($children[0]->getName());
                                     }
-                                    $curr->addParam($children[0]->getName());
                                     if (!$curr->_in_param) {
                                         goto BRACKET_RECALL;
                                     }
@@ -236,8 +272,11 @@ class Parser
             //     $node->setScope($node->getParent()->getScope());
             // }
             // TODO: add try catch for
-            if ($node instanceof FunctionNode) {
-                $node->setScope($node->getParent()->getScope()->subScope('0'));
+            if (
+                $node instanceof FunctionNode ||
+                $node instanceof ForNode
+            ) {
+                $node->setScope($node->getParent()->getScope()->subScope($childId));
             } else {
                 $node->setScope($node->getParent()->getScope());
             }

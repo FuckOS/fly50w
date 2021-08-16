@@ -10,6 +10,7 @@ namespace Fly50w\Lexer;
 
 use Fly50w\Lexer\Token;
 use Fly50w\Utils\IgnoreUtil;
+use Symfony\Component\VarDumper\VarDumper;
 
 class Lexer
 {
@@ -60,7 +61,10 @@ class Lexer
             }
             $shouldCut = $this->shouldCut(
                 current: $tokens[$curr],
-                next_char: $curr_chr
+                next_char: $curr_chr,
+                code_c_str: $code_c_str,
+                pos: $pos,
+                last_token: ($curr > 0) ? $tokens[$curr - 1] : null
             );
             if (!$shouldCut) {
                 $tokens[$curr] .= $curr_chr;
@@ -155,8 +159,13 @@ class Lexer
         );
     }
 
-    public static function shouldCut(string $current, string &$next_char): bool
-    {
+    public static function shouldCut(
+        string $current,
+        string &$next_char,
+        ?array $code_c_str = null,
+        int $pos = 0,
+        ?string $last_token = null
+    ): bool {
         // Note that this is order-sensitive
         static $chars_delimiters = [
             '::', '>=', '<=', '!=', '==', '->', '<-', '~>', '=>',
@@ -179,6 +188,37 @@ class Lexer
         if ($is_empty_char) {
             $next_char = '';
             return true;
+        }
+
+        if ($code_c_str !== null) {
+            if ($next_char === '.') {
+                if (
+                    array_key_exists($pos - 2, $code_c_str) &&
+                    is_numeric($code_c_str[$pos - 2])
+                ) {
+                    return false;
+                }
+            }
+            if (is_numeric($next_char)) {
+                if (
+                    array_key_exists($pos - 2, $code_c_str) &&
+                    $code_c_str[$pos - 2] === '.'
+                ) {
+                    return false;
+                }
+            }
+        }
+
+        if (
+            $current === '-' &&
+            is_numeric($next_char) &&
+            $last_token !== null &&
+            strpos(
+                haystack: $char_delimiters,
+                needle: $last_token
+            ) !== false
+        ) {
+            return false;
         }
 
         if (in_array($current . $next_char, $chars_delimiters)) {

@@ -23,7 +23,9 @@ use RuntimeException;
 
 class VM
 {
-    public array $states = [];
+    public array $states = [
+        'INF' => INF
+    ];
 
     public function __construct()
     {
@@ -41,13 +43,15 @@ class VM
 
     public function execute(RootNode $ast): mixed
     {
+        $last_rslt = null;
         foreach ($ast->getChildren() as $child) {
             $rslt = $this->runNode($child);
             if ($rslt instanceof ReturnFlag) {
                 return $rslt->data;
             }
+            if ($rslt !== null) $last_rslt = $rslt;
         }
-        return null;
+        return $last_rslt;
     }
 
     public function runNode(Node $node): mixed
@@ -76,8 +80,8 @@ class VM
                     $this->runNode($node->getTopChild()->getTopChild())
                 );
             }
-            if ($node->getTopChild() != null) // FIXME: ok
-                $this->runNode($node->getTopChild());
+            if ($node->getTopChild() != null)
+                return $this->runNode($node->getTopChild());
             return null;
         }
         if ($node instanceof AssignNode) {
@@ -113,15 +117,18 @@ class VM
                 foreach ($params as $k => $v) {
                     $vm->states[$v] = $args[$k];
                 }
+                $last_rslt = null;
                 foreach ($node->getChildren() as $child) {
                     $rslt = $vm->runNode($child);
                     if ($rslt instanceof ReturnFlag) {
                         return $rslt->data;
                     }
+                    $last_rslt = $rslt ?? $last_rslt;
                 }
                 foreach ($params as $k => $v) {
                     unset($vm->states[$v]);
                 }
+                return $last_rslt;
             };
         }
         if ($node instanceof FunctionCallNode) {
@@ -174,6 +181,10 @@ class VM
                 return $a / $b;
             case '%':
                 return $a % $b;
+            case '**':
+                return pow($a, $b);
+            case '..':
+                return $a . $b;
             default:
                 throw new InvalidASTException('Unknown operator');
         }

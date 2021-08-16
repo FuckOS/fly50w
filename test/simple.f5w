@@ -1,9 +1,22 @@
+!import testProj/50w.f5w
+
 let main = fn (c, d) {
     let a = (1 + 2) * 5;
     let b = a * 3 + c;
-    b = b - 1;
+    b = b-1;
+    for {
+        let e = 12;
+        e + 1;
+    };
     print(b + d);
+    print("hello world\r\n", 123 + 1);
+    try {
+
+    } except (@error) {
+
+    }
     return b + d;
 };
 
 main(1, 2);
+print(main(3, 4));
