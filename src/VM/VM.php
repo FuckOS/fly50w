@@ -190,6 +190,18 @@ class VM
                 return pow($a, $b);
             case '..':
                 return $a . $b;
+            case '==':
+                return $a == $b;
+            case '!=':
+                return $a != $b;
+            case '<=':
+                return $a <= $b;
+            case '>=':
+                return $a >= $b;
+            case '>':
+                return $a > $b;
+            case '<':
+                return $a < $b;
             default:
                 throw new InvalidASTException('Unknown operator');
         }

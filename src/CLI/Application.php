@@ -242,8 +242,8 @@ class Application
         $ast = $parser->assignScope($ast);
 
         $this->cli->info("Generating fly50vm recognizable instructions...");
-        // file_put_contents($output, gzencode(serialize($ast), 9));
-        file_put_contents($output, @var_export($ast, true));
+        file_put_contents($output, gzencode(serialize($ast), 9));
+        // file_put_contents($output, @var_export($ast, true));
         $this->cli->br();
 
         $this->cli->out(

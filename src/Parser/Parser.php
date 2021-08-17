@@ -34,7 +34,6 @@ class Parser
     /**
      * Parse the normalized tokens
      *
-     * 
      * @param Token[] $code
      * @return Node
      */
@@ -118,6 +117,9 @@ class Parser
                         case 'let':
                             $curr->addChild(new LetFlagNode());
                             break;
+                        case 'except':
+
+                            break;
                     }
                     break;
                 case Token::T_SYMBOL:
@@ -144,6 +146,12 @@ class Parser
                         case '%':
                         case '..':
                         case '**':
+                        case '==':
+                        case '!=':
+                        case '<=':
+                        case '>=':
+                        case '<':
+                        case '>':
                             $curr = (new OperatorNode($token->value))->addChild($curr->popChild())->setParent($curr);
                             $curr->getParent()->addChild($curr);
                             break;
