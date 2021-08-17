@@ -45,7 +45,7 @@ class Facade
     ): mixed {
         return $this->vm->execute(
             $this->parseCode(
-                Merger::mergeFile('**$') . $code,
+                Merger::mergeFile('**$' . $code),
                 $filename
             )
         );

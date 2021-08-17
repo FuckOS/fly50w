@@ -22,6 +22,8 @@ use Fly50w\Parser\AST\VariableNode;
 use Fly50w\Parser\AST\Internal\LetFlagNode;
 use Fly50w\Exceptions\SyntaxErrorException;
 use Fly50w\Exceptions\UnmatchedBracketsException;
+use Fly50w\Parser\AST\LabelNode;
+use Fly50w\Parser\AST\TryNode;
 
 class Parser
 {
@@ -32,6 +34,7 @@ class Parser
     /**
      * Parse the normalized tokens
      *
+     * 
      * @param Token[] $code
      * @return Node
      */
@@ -62,7 +65,9 @@ class Parser
                             $value = null;
                             break;
                         case Scalar::T_BOOL:
-                            $value = "true" == strtolower($value);
+                            if (is_string($value)) {
+                                $value = "true" === strtolower($value);
+                            }
                             break;
                     }
                     $curr->addChild(new LiteralNode(
@@ -72,6 +77,9 @@ class Parser
                     break;
                 case Token::T_IDENTIFY:
                     $curr->addChild(new VariableNode($token->value));
+                    break;
+                case Token::T_ANNOTATION:
+                    $curr->addChild(new LabelNode($token->value));
                     break;
                 case Token::T_KEYWORD:
                     switch ($token->value) {
@@ -85,6 +93,11 @@ class Parser
                             $fn = new ForNode();
                             $curr->addChild($fn);
                             $curr = $fn;
+                            break;
+                        case 'try':
+                            $tn = new TryNode();
+                            $curr->addChild($tn);
+                            $curr = $tn;
                             break;
                         case 'return':
                             if (!$curr instanceof StatementNode || !$curr->isEmpty()) {
@@ -160,6 +173,7 @@ class Parser
                                 unset($topChild);
                                 $curr->addChild($fcn);
                                 $curr = $fcn;
+                                break;
                             }
                             $en = new BraceExpressionNode();
                             $curr->addChild($en);
@@ -183,6 +197,12 @@ class Parser
                             ) {
                                 $curr = $curr->getParent();
                             }
+                            if ($curr instanceof FunctionCallNode) {
+                                goto PURGE_TO_ARGUMENTS;
+                            }
+                            if ($curr instanceof ArgumentNode) {
+                                $curr = $curr->getParent()->getParent();
+                            }
                             // TODO: finish this
                             break;
                         case '{':
@@ -198,7 +218,10 @@ class Parser
                                 $curr = $sn;
                                 // TODO: finish this
                             }
-                            if ($curr instanceof ForNode) {
+                            if (
+                                $curr instanceof ForNode ||
+                                $curr instanceof TryNode
+                            ) {
                                 $sn = new StatementNode();
                                 $curr->addChild($sn);
                                 $curr = $sn;
@@ -219,12 +242,16 @@ class Parser
                             if ($curr instanceof FunctionNode) {
                                 $curr = $curr->getParent();
                             }
-                            if ($curr instanceof ForNode) {
+                            if (
+                                $curr instanceof ForNode ||
+                                $curr instanceof TryNode
+                            ) {
                                 $curr = $curr->getParent();
                             }
                             break;
                         case ',':
                             if ($curr instanceof FunctionCallNode) {
+                                PURGE_TO_ARGUMENTS:
                                 $curr = (new ArgumentNode())->addChildren($curr->purgeChildren())->setParent($curr);
                                 $curr->getParent()->addChild($curr);
                                 break;
@@ -272,7 +299,8 @@ class Parser
             // TODO: add try catch for
             if (
                 $node instanceof FunctionNode ||
-                $node instanceof ForNode
+                $node instanceof ForNode ||
+                $node instanceof TryNode
             ) {
                 $node->setScope($node->getParent()->getScope()->subScope($childId));
             } else {

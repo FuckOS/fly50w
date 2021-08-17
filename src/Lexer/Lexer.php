@@ -92,12 +92,6 @@ class Lexer
                 value: $token
             );
         }
-        if ($this->isIdentify($token)) {
-            return new Token(
-                type: Token::T_IDENTIFY,
-                value: $token
-            );
-        }
         if (
             substr($token, 0, 1) === '@'
             && $this->isIdentify(substr($token, 1))
@@ -151,6 +145,12 @@ class Lexer
                     type: Scalar::T_NULL,
                     value: null
                 )
+            );
+        }
+        if ($this->isIdentify($token)) {
+            return new Token(
+                type: Token::T_IDENTIFY,
+                value: $token
             );
         }
         return new Token(
@@ -273,6 +273,7 @@ class Lexer
             // 'as',
             'return',
             'for',
+            'break',
             // 'while',
             // 'if',
             // 'match',

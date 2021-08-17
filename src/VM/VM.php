@@ -4,6 +4,7 @@ namespace Fly50w\VM;
 
 use Exception;
 use Fly50w\Exceptions\InvalidASTException;
+use Fly50w\Parser\AST\ArgumentNode;
 use Fly50w\Parser\AST\AssignNode;
 use Fly50w\Parser\AST\BraceExpressionNode;
 use Fly50w\Parser\AST\BreakNode;
@@ -138,7 +139,7 @@ class VM
                 throw new Exception("Attempting to call $func which is not a function");
             }
             $args = [];
-            if (!($node->getTopChild() instanceof BraceExpressionNode)) {
+            if (!($node->getTopChild() instanceof ArgumentNode)) {
                 throw new Exception('Invalid AST in FunctionCallNode');
             }
             foreach ($node->getTopChild()->getChildren() as $child) {

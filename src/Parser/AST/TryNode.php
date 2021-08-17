@@ -1,0 +1,7 @@
+<?php
+
+namespace Fly50w\Parser\AST;
+
+class TryNode extends ExpressionNode
+{
+}

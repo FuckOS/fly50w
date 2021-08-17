@@ -9,6 +9,9 @@ class Merger
     public static function mergeFile(string $filename, ?CLImate $cli = null): string
     {
         $code = self::getFile($filename);
+        if (substr($filename, 0, 3) == '**$') {
+            $filename = getcwd();
+        }
         $lines = explode("\n", $code);
 
         if ($cli !== null) {
@@ -22,7 +25,7 @@ class Merger
                 break;
             }
             $file = trim(substr($line, 8));
-            $line = self::mergeFile(dirname($filename) . '/' . $file, $cli);
+            $line = self::mergeFile((is_dir($filename) ? $filename : dirname($filename)) . '/' . $file, $cli);
         }
 
         return implode("\n", $lines);
