@@ -4,20 +4,31 @@ namespace Fly50w\Parser\AST;
 
 class ExceptNode extends ExpressionNode
 {
-    public string $label;
+    /**
+     * Labels
+     *
+     * @var string[]
+     */
+    public array $labels;
 
     public function __construct()
     {
     }
 
-    public function getLabel(): string
+    public function getLabels(): array
     {
         return $this->label;
     }
 
-    public function setLable(string $label): self
+    public function setLabels(array $labels): self
     {
-        $this->label = $label;
+        $this->labels = $labels;
+        return $this;
+    }
+
+    public function addLabel(string $label): self
+    {
+        $this->labels[] = $label;
         return $this;
     }
 }

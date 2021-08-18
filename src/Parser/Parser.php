@@ -2,6 +2,7 @@
 
 namespace Fly50w\Parser;
 
+use Exception;
 use Fly50w\Lexer\Token;
 use Fly50w\Lexer\Scalar;
 use Fly50w\Parser\AST\Node;
@@ -22,7 +23,9 @@ use Fly50w\Parser\AST\VariableNode;
 use Fly50w\Parser\AST\Internal\LetFlagNode;
 use Fly50w\Exceptions\SyntaxErrorException;
 use Fly50w\Exceptions\UnmatchedBracketsException;
+use Fly50w\Parser\AST\ExceptNode;
 use Fly50w\Parser\AST\LabelNode;
+use Fly50w\Parser\AST\ThrowNode;
 use Fly50w\Parser\AST\TryNode;
 
 class Parser
@@ -88,6 +91,12 @@ class Parser
                             $curr = $fn;
                             $curr->_in_param = true;
                             break;
+                        case 'except':
+                            $en = new ExceptNode();
+                            $curr->addChild($en);
+                            $curr = $en;
+                            $curr->_in_param = true;
+                            break;
                         case 'for':
                             $fn = new ForNode();
                             $curr->addChild($fn);
@@ -97,6 +106,14 @@ class Parser
                             $tn = new TryNode();
                             $curr->addChild($tn);
                             $curr = $tn;
+                            break;
+                        case 'throw':
+                            if (!$curr instanceof StatementNode || !$curr->isEmpty()) {
+                                throw new SyntaxErrorException('Return should be an independent expression');
+                            }
+                            $rn = new ThrowNode();
+                            $curr->addChild($rn);
+                            $curr = $rn;
                             break;
                         case 'return':
                             if (!$curr instanceof StatementNode || !$curr->isEmpty()) {
@@ -116,9 +133,6 @@ class Parser
                             break;
                         case 'let':
                             $curr->addChild(new LetFlagNode());
-                            break;
-                        case 'except':
-
                             break;
                     }
                     break;
@@ -166,7 +180,10 @@ class Parser
                             break;
                         case '(':
                             $brackets->push('(');
-                            if ($curr instanceof FunctionNode && $curr->_in_param) {
+                            if (($curr instanceof FunctionNode ||
+                                    $curr instanceof ExceptNode) &&
+                                $curr->_in_param
+                            ) {
                                 break;
                             }
                             $topChild = $curr->getTopChild();
@@ -195,7 +212,10 @@ class Parser
                             while ($curr->isFull()) {
                                 $curr = $curr->getParent();
                             }
-                            if ($curr instanceof FunctionNode && $curr->_in_param) {
+                            if (($curr instanceof FunctionNode ||
+                                    $curr instanceof ExceptNode) &&
+                                $curr->_in_param
+                            ) {
                                 // $curr->_in_param = false;
                                 break;
                             }
@@ -224,7 +244,18 @@ class Parser
                                 $sn = new StatementNode();
                                 $curr->addChild($sn);
                                 $curr = $sn;
-                                // TODO: finish this
+                                break;
+                            }
+                            if ($curr instanceof ExceptNode) {
+                                if ($curr->_in_param) {
+                                    $curr->_in_param = false;
+                                    goto END_LABEL;
+                                }
+                                BRACKET_RECALL_EXCEPT:
+                                $sn = new StatementNode();
+                                $curr->addChild($sn);
+                                $curr = $sn;
+                                break;
                             }
                             if (
                                 $curr instanceof ForNode ||
@@ -247,7 +278,10 @@ class Parser
                                     $curr->popChild();
                                 }
                             }
-                            if ($curr instanceof FunctionNode) {
+                            if (
+                                $curr instanceof FunctionNode ||
+                                $curr instanceof ExceptNode
+                            ) {
                                 $curr = $curr->getParent();
                             }
                             if (
@@ -276,6 +310,22 @@ class Parser
                                     }
                                     if (!$curr->_in_param) {
                                         goto BRACKET_RECALL;
+                                    }
+                                    break;
+                                }
+                            }
+                            if ($curr instanceof ExceptNode) {
+                                if ($curr->_in_param) {
+                                    END_LABEL:
+                                    $children = $curr->purgeChildren();
+                                    if (count($children) > 0) {
+                                        if (count($children) != 1 || !($children[0] instanceof LabelNode)) {
+                                            throw new SyntaxErrorException("Expected ',' received T_EXPR");
+                                        }
+                                        $curr->addLabel($children[0]->getName());
+                                    }
+                                    if (!$curr->_in_param) {
+                                        goto BRACKET_RECALL_EXCEPT;
                                     }
                                     break;
                                 }
