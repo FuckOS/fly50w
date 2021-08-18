@@ -88,7 +88,7 @@ class VM
             if ($this->currentError != null) {
                 throw new RuntimeException("Uncaught error {$this->currentError->getName()}");
             }
-            if ($node->getChildren() instanceof BreakNode) {
+            if ($node->getTopChild() instanceof BreakNode) {
                 return new BreakFlag();
             }
             if ($node->getTopChild() instanceof ReturnNode) {
