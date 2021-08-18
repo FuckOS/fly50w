@@ -358,7 +358,8 @@ class Parser
             if (
                 $node instanceof FunctionNode ||
                 $node instanceof ForNode ||
-                $node instanceof TryNode
+                $node instanceof TryNode ||
+                $node instanceof ExceptNode
             ) {
                 $node->setScope($node->getParent()->getScope()->subScope($childId));
             } else {
