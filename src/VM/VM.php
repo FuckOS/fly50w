@@ -18,16 +18,24 @@ use Fly50w\Parser\AST\ReturnNode;
 use Fly50w\Parser\AST\RootNode;
 use Fly50w\Parser\AST\Scope;
 use Fly50w\Parser\AST\StatementNode;
+use Fly50w\Parser\AST\TryNode;
 use Fly50w\Parser\AST\VariableNode;
 use Fly50w\VM\Internal\BreakFlag;
 use Fly50w\VM\Internal\ReturnFlag;
-use RuntimeException;
+use Fly50w\VM\Types\Label;
+use Fly50w\Exceptions\RuntimeException;
+use Fly50w\Parser\AST\ExceptNode;
+use Fly50w\Parser\AST\LabelNode;
+use Fly50w\Parser\AST\ThrowNode;
+use Fly50w\VM\Internal\ThrowFlag;
 
 class VM
 {
     public array $states = [
         'INF' => INF
     ];
+
+    public ?Label $currentError = null;
 
     public function __construct()
     {
@@ -61,6 +69,9 @@ class VM
         if ($node instanceof LiteralNode) {
             return $node->getValue();
         }
+        if ($node instanceof LabelNode) {
+            return new Label($node->getName());
+        }
         if ($node instanceof VariableNode) {
             return $this->getVariable($node->getName(), $node->getScope());
         }
@@ -74,17 +85,37 @@ class VM
             return $this->calculateOperator($node);
         }
         if ($node instanceof StatementNode) {
+            if ($this->currentError != null) {
+                throw new RuntimeException("Uncaught error {$this->currentError->getName()}");
+            }
             if ($node->getChildren() instanceof BreakNode) {
                 return new BreakFlag();
             }
             if ($node->getTopChild() instanceof ReturnNode) {
+                if ($node->getTopChild()->countChildren() === 0) {
+                    return new ReturnFlag();
+                }
                 return new ReturnFlag(
                     $this->runNode($node->getTopChild()->getTopChild())
                 );
             }
-            if ($node->getTopChild() != null)
-                return $this->runNode($node->getTopChild());
-            return null;
+            $last_rslt = null;
+            foreach ($node->getChildren() as $child) {
+                $rslt = $this->runNode($child);
+                $last_rslt = $rslt ?? $last_rslt;
+            }
+            return $last_rslt;
+        }
+        if ($node instanceof ThrowNode) {
+            if ($node->countChildren() != 1) {
+                throw new RuntimeException("Must throw something out");
+            }
+            $err = $this->runNode($node->getTopChild());
+            if (!($err instanceof Label)) {
+                throw new RuntimeException('You can only throw a Label');
+            }
+            $this->currentError = $err;
+            return new ThrowFlag($err);
         }
         if ($node instanceof AssignNode) {
             if (
@@ -125,6 +156,9 @@ class VM
                     if ($rslt instanceof ReturnFlag) {
                         return $rslt->data;
                     }
+                    if ($rslt instanceof ThrowFlag) {
+                        return $rslt;
+                    }
                     $last_rslt = $rslt ?? $last_rslt;
                 }
                 foreach ($params as $k => $v) {
@@ -148,7 +182,60 @@ class VM
             return $func($args, $this);
         }
         if ($node instanceof ForNode) {
-            return $node;
+            $last_rslt = null;
+            while (true) {
+                foreach ($node->getChildren() as $child) {
+                    $rslt = $this->runNode($child);
+                    if ($rslt instanceof BreakFlag) {
+                        return $last_rslt;
+                    }
+                    if ($rslt instanceof ReturnFlag) {
+                        return $rslt;
+                    }
+                    if ($rslt instanceof ThrowFlag) {
+                        return $rslt;
+                    }
+                    $last_rslt = $rslt ?? $last_rslt;
+                }
+            }
+        }
+        if ($node instanceof TryNode) {
+            $last_rslt = null;
+            foreach ($node->getChildren() as $child) {
+                $rslt = $this->runNode($child);
+                if ($rslt instanceof ReturnFlag) {
+                    return $rslt;
+                }
+                if ($rslt instanceof ThrowFlag) {
+                    return $rslt;
+                }
+                $last_rslt = $rslt ?? $last_rslt;
+            }
+            return $last_rslt;
+        }
+        if ($node instanceof ExceptNode) {
+            if ($this->currentError === null) {
+                return null;
+            }
+            if (in_array(
+                $this->currentError->getName(),
+                $node->getLabels()
+            )) {
+                $this->currentError = null;
+                $last_rslt = null;
+                foreach ($node->getChildren() as $child) {
+                    $rslt = $this->runNode($child);
+                    if ($rslt instanceof ReturnFlag) {
+                        return $rslt;
+                    }
+                    if ($rslt instanceof ThrowFlag) {
+                        return $rslt;
+                    }
+                    $last_rslt = $rslt ?? $last_rslt;
+                }
+                return $last_rslt;
+            }
+            return null;
         }
         return null;
     }

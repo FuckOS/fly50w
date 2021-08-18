@@ -17,7 +17,7 @@ class ExceptNode extends ExpressionNode
 
     public function getLabels(): array
     {
-        return $this->label;
+        return $this->labels;
     }
 
     public function setLabels(array $labels): self

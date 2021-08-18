@@ -219,14 +219,15 @@ class Parser
                                 // $curr->_in_param = false;
                                 break;
                             }
+                            if ($curr instanceof FunctionCallNode) {
+                                $curr = (new ArgumentNode())->addChildren($curr->purgeChildren())->setParent($curr);
+                                $curr->getParent()->addChild($curr);
+                            }
                             if (
                                 $curr instanceof BraceExpressionNode ||
                                 $curr instanceof FunctionCallNode
                             ) {
                                 $curr = $curr->getParent();
-                            }
-                            if ($curr instanceof FunctionCallNode) {
-                                goto PURGE_TO_ARGUMENTS;
                             }
                             if ($curr instanceof ArgumentNode) {
                                 $curr = $curr->getParent()->getParent();
@@ -293,7 +294,6 @@ class Parser
                             break;
                         case ',':
                             if ($curr instanceof FunctionCallNode) {
-                                PURGE_TO_ARGUMENTS:
                                 $curr = (new ArgumentNode())->addChildren($curr->purgeChildren())->setParent($curr);
                                 $curr->getParent()->addChild($curr);
                                 break;

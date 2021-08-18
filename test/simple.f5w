@@ -1,13 +1,19 @@
 !import testProj/50w.f5w
 
-let main = fn (c, d) {
-    let a = (1 + 2) * 5;
-    let b = a * 3 + c;
-    b = b-1;
-    print(b + d);
-    print("hello world\r\n", 123 + 1); # hello
-    return b + d;
+let main = fn () {
+    throw @test;
 };
 
-main(1, 2);
-print(main(3, 4));
+let testFn = fn (a) {
+    try {
+        main();
+    } except (@another, @test) {
+        print("bad\r\n");
+    } except (@error) {
+        print("ok\r\n");
+    };
+};
+
+testFn(123);
+
+print(345);
