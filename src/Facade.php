@@ -18,12 +18,14 @@ class Facade
     protected Lexer $lexer;
     protected VM $vm;
     protected Parser $parser;
+    protected Merger $merger;
 
     public function __construct()
     {
         $this->lexer = new Lexer;
         $this->vm = new VM;
         $this->parser = new Parser;
+        $this->merger = new Merger;
     }
 
     public function getVM(): VM
@@ -45,7 +47,7 @@ class Facade
     ): mixed {
         return $this->vm->execute(
             $this->parseCode(
-                Merger::mergeFile('**$' . $code),
+                $this->merger->mergeFile('**$' . $code),
                 $filename
             )
         );

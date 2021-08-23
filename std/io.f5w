@@ -1,0 +1,3 @@
+let println = fn (str) {
+    print(str .. "\r\n");
+};

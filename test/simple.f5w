@@ -1,4 +1,6 @@
+#import_directory /
 !import testProj/50w.f5w
+!import io.f5w
 
 let main = fn () {
     throw @test;
@@ -9,6 +11,8 @@ let testFn = fn (a) {
         main();
     } except (@another, @test) {
         print(a .. "\r\n");
+        debug(main);
+        println(read_file('dev-test.php'));
     } except (@error) {
         print("ok\r\n");
     };
@@ -17,3 +21,4 @@ let testFn = fn (a) {
 testFn(123);
 
 print(345);
+println("");

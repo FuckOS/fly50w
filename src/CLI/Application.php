@@ -206,11 +206,12 @@ class Application
 
         $lexer = new Lexer();
         $parser = new Parser();
+        $merger = new Merger();
 
         $this->cli->info("Merging code files... ")->br();
 
         try {
-            $code = Merger::mergeFile($input, $this->cli);
+            $code = $merger->mergeFile($input, $this->cli);
         } catch (\Exception $e) {
             $this->cli->out($e->getMessage());
             if (!$this->cli->arguments->defined('interactive')) {

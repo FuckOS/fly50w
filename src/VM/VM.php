@@ -29,9 +29,9 @@ use Fly50w\Exceptions\RuntimeException;
 use Fly50w\Parser\AST\ExceptNode;
 use Fly50w\Parser\AST\LabelNode;
 use Fly50w\Parser\AST\ThrowNode;
+use Fly50w\StdLib\Internal;
 use Fly50w\VM\Internal\PurgeResultFlag;
 use Fly50w\VM\Internal\ThrowFlag;
-use TypeError;
 
 class VM
 {
@@ -43,24 +43,7 @@ class VM
 
     public function __construct()
     {
-        $this->states['print'] = function (array $args, VM $vm) {
-            foreach ($args as $arg) {
-                if (is_string($arg)) {
-                    echo $arg;
-                } else {
-                    var_dump($arg);
-                }
-            }
-            return $args[0];
-        };
-        $this->states['assert'] = function (array $args, VM $vm) {
-            foreach ($args as $arg) {
-                if (!$arg) {
-                    return $vm->throwError('assertError');
-                }
-            }
-            return true;
-        };
+        new Internal($this);
     }
 
     public function execute(RootNode $ast): mixed
@@ -277,6 +260,24 @@ class VM
             $scope = $scope->upperScope();
         }
         return $this->states[$scope . $name];
+    }
+
+    public function assignVariable(string $name, mixed $value, ?Scope $nodeScope = null): self
+    {
+        if ($nodeScope === null) {
+            $this->states[$name] = $value;
+        } else {
+            $this->states[$nodeScope->scope . $name] = $value;
+        }
+        return $this;
+    }
+
+    public function assignNativeFunction(string $name, callable $func): self
+    {
+        $this->assignVariable($name, function (array $args, VM $vm) use ($func) {
+            return call_user_func_array($func, $args);
+        });
+        return $this;
     }
 
     public function throwError(string $label): ThrowFlag

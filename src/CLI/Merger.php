@@ -6,9 +6,28 @@ use League\CLImate\CLImate;
 
 class Merger
 {
-    public static function mergeFile(string $filename, ?CLImate $cli = null): string
+    public function __construct(
+        protected array $importDirectories = []
+    ) {
+        $this->addImportDirectory('.');
+        if (is_dir(dirname(dirname(__DIR__)) . '/std')) {
+            $this->addImportDirectory(dirname(dirname(__DIR__)) . '/std');
+        }
+    }
+
+    public function addImportDirectory(array|string $dir): self
     {
-        $code = self::getFile($filename);
+        if (is_array($dir)) {
+            $this->importDirectories = array_merge($this->importDirectories, $dir);
+        } else {
+            $this->importDirectories[] = $dir;
+        }
+        return $this;
+    }
+
+    public function mergeFile(string $filename, ?CLImate $cli = null, string $last_file = ''): string
+    {
+        $code = $this->getFile($filename, $last_file);
         if (substr($filename, 0, 3) == '**$') {
             $filename = getcwd();
         }
@@ -21,11 +40,16 @@ class Merger
         foreach ($lines as &$line) {
             $line = trim($line);
             if ($line == '') continue;
-            if (substr($line, 0, 8) != '!import ') {
+            if (substr($line, 0, 18) === '#import_directory ') {
+                $dir = substr($line, 18, 0);
+                $this->addImportDirectory($dir);
+                continue;
+            }
+            if (substr($line, 0, 8) !== '!import ') {
                 break;
             }
             $file = trim(substr($line, 8));
-            $line = self::mergeFile((is_dir($filename) ? $filename : dirname($filename)) . '/' . $file, $cli);
+            $line = $this->mergeFile($file, $cli, $filename);
         }
 
         return implode("\n", $lines);
@@ -36,14 +60,19 @@ class Merger
         return count(explode("\n", $code));
     }
 
-    protected static function getFile(string $filename): string
+    protected function getFile(string $filename, string $current_file = ''): string
     {
         if (substr($filename, 0, 3) == '**$') {
             return substr($filename, 3);
         }
-        if (!file_exists($filename)) {
+        foreach ($this->importDirectories as $dir) {
+            if (file_exists($dir . '/' . $filename)) {
+                return file_get_contents($dir . '/' . $filename);
+            }
+        }
+        if (!file_exists(dirname($current_file) . '/' . $filename)) {
             throw new \Exception("<red><bold>Import file not found:</bold></red> $filename");
         }
-        return file_get_contents($filename);
+        return file_get_contents(dirname($current_file) . '/' . $filename);
     }
 }
