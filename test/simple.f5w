@@ -8,7 +8,7 @@ let testFn = fn (a) {
     try {
         main();
     } except (@another, @test) {
-        print("bad\r\n");
+        print(a .. "\r\n");
     } except (@error) {
         print("ok\r\n");
     };

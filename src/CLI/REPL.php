@@ -37,6 +37,7 @@ class REPL
             }
         } catch (\Exception $e) {
             (new CLImate)->bold()->backgroundBlue()->error($e->getMessage());
+            $this->facade->getVM()->recoverFromError();
         } catch (\Error $e) {
             (new CLImate)->bold()->backgroundBlue()->error($e->getMessage());
         }

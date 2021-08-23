@@ -37,8 +37,8 @@ class Scope
     public function upperScope(): Scope
     {
         $pos = strripos(
-            haystack: ':',
-            needle: $this->scope
+            needle: ':',
+            haystack: $this->scope
         );
         return new Scope(substr($this->scope, 0, $pos));
     }

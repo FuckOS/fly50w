@@ -2,6 +2,8 @@
 
 namespace Fly50w\VM;
 
+use DivisionByZeroError;
+use Error;
 use Exception;
 use Fly50w\Exceptions\InvalidASTException;
 use Fly50w\Parser\AST\ArgumentNode;
@@ -27,7 +29,9 @@ use Fly50w\Exceptions\RuntimeException;
 use Fly50w\Parser\AST\ExceptNode;
 use Fly50w\Parser\AST\LabelNode;
 use Fly50w\Parser\AST\ThrowNode;
+use Fly50w\VM\Internal\PurgeResultFlag;
 use Fly50w\VM\Internal\ThrowFlag;
+use TypeError;
 
 class VM
 {
@@ -48,6 +52,14 @@ class VM
                 }
             }
             return $args[0];
+        };
+        $this->states['assert'] = function (array $args, VM $vm) {
+            foreach ($args as $arg) {
+                if (!$arg) {
+                    return $vm->throwError('assertError');
+                }
+            }
+            return true;
         };
     }
 
@@ -82,7 +94,16 @@ class VM
             return count($node->children) == 1 ? $this->runNode($node->children[0]) : null;
         }
         if ($node instanceof OperatorNode) {
-            return $this->calculateOperator($node);
+            try {
+                $rslt = $this->calculateOperator($node);
+            } catch (Error $e) {
+                if ($e instanceof DivisionByZeroError) {
+                    return $this->throwError('divisionByZero');
+                } else {
+                    throw $e;
+                }
+            }
+            return $rslt;
         }
         if ($node instanceof StatementNode) {
             if ($this->currentError != null) {
@@ -103,6 +124,9 @@ class VM
             foreach ($node->getChildren() as $child) {
                 $rslt = $this->runNode($child);
                 $last_rslt = $rslt ?? $last_rslt;
+                if ($rslt instanceof PurgeResultFlag) {
+                    $last_rslt = null;
+                }
             }
             return $last_rslt;
         }
@@ -222,7 +246,7 @@ class VM
                 $node->getLabels()
             )) {
                 $this->currentError = null;
-                $last_rslt = null;
+                $last_rslt = new PurgeResultFlag;
                 foreach ($node->getChildren() as $child) {
                     $rslt = $this->runNode($child);
                     if ($rslt instanceof ReturnFlag) {
@@ -255,6 +279,18 @@ class VM
         return $this->states[$scope . $name];
     }
 
+    public function throwError(string $label): ThrowFlag
+    {
+        $this->currentError = new Label($label);
+        return new ThrowFlag($this->currentError);
+    }
+
+    public function recoverFromError(): self
+    {
+        $this->currentError = null;
+        return $this;
+    }
+
     protected function calculateOperator(OperatorNode $node): mixed
     {
         if (count($node->getChildren()) != 2) {
@@ -278,6 +314,9 @@ class VM
             case '..':
                 return $a . $b;
             case '==':
+                if (($a instanceof Label) && ($b instanceof Label)) {
+                    return $a->getName() == $b->getName();
+                }
                 return $a == $b;
             case '!=':
                 return $a != $b;
