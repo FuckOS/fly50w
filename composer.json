@@ -1,5 +1,5 @@
 {
-    "name": "xtlsoft/fly50w",
+    "name": "flylang/fly50w",
     "autoload": {
         "psr-4": {
             "Fly50w\\": "src/"
