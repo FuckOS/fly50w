@@ -1,5 +1,5 @@
 {
     "require": {
-        "flylang/fly50w": "latest"
+        "flylang/fly50w": "dev-main"
     }
 }
