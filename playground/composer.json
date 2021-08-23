@@ -1,0 +1,5 @@
+{
+    "require": {
+        "flylang/fly50w": "latest"
+    }
+}

@@ -1,6 +1,6 @@
 #import_directory /
 !import testProj/50w.f5w
-!import io.f5w
+!import std/io.f5w
 
 let main = fn () {
     throw @test;

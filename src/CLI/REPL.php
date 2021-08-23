@@ -29,12 +29,12 @@ class REPL
             return false;
         }
         try {
-            if (substr($input, 0, 8) === '!import ') {
-                $this->facade->runFile(substr($input, 8));
-            } else {
-                $rslt = $this->facade->run($input, 'REPL_CODE');
-                $this->output($rslt);
-            }
+            // if (substr($input, 0, 8) === '!import ') {
+            // $this->facade->runFile(substr($input, 8));
+            // } else {
+            $rslt = $this->facade->run($input, 'REPL_CODE');
+            $this->output($rslt);
+            // }
         } catch (\Exception $e) {
             (new CLImate)->bold()->backgroundBlue()->error($e->getMessage());
             $this->facade->getVM()->recoverFromError();
