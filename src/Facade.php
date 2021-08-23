@@ -35,7 +35,7 @@ class Facade
 
     public function runFile(string $filename): mixed
     {
-        $code = Merger::mergeFile($filename);
+        $code = $this->merger->mergeFile($filename);
         $ast = $this->parseCode($code, $filename);
 
         return $this->vm->execute($ast);
