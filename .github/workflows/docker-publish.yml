@@ -15,7 +15,7 @@ on:
 
 env:
   # Use docker.io for Docker Hub if empty
-  REGISTRY: hub.docker.com
+  REGISTRY: docker.io
   IMAGE_NAME: xtlsoft/fly50w
 #   REGISTRY: ghcr.io
   # github.repository as <account>/<repo>
