@@ -3,8 +3,10 @@
 use Fly50w\Facade;
 use Fly50w\VM\VM;
 
-if (!file_exists('vendor/autoload.php'))
+if (file_exists(__DIR__ . '/../../vendor/autoload.php'))
     require_once __DIR__ . '/../../vendor/autoload.php';
+else if (file_exists(__DIR__ . '/../vendor/autoload.php'))
+    require_once __DIR__ . '/../vendor/autoload.php';
 else require_once 'vendor/autoload.php';
 
 ini_set('display_errors', 1);
@@ -110,7 +112,7 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
                 <h2>Contact</h2>
                 <p>Email to <a href="mailto:xtl@xtlsoft.top">administrator</a>.</p>
                 <h2>Copyright</h2>
-                <p>漏 FuckOS Organization <?= date('Y') ?></p>
+                <p>&copy; FuckOS Organization <?= date('Y') ?></p>
             </code>
         </div>
     </body>
@@ -143,13 +145,21 @@ $rslt = '';
 $facade = new Facade();
 $facade->getVM()->states['print'] = function (array $args, VM $vm) use (&$rslt) {
     foreach ($args as $arg) {
-        if (is_string($arg)) {
-            $rslt .= $arg;
-        } else {
-            $rslt .= var_export($arg, true);
-        }
+        $rslt .= (string) $arg;
     }
+    return $args[0];
 };
+$facade->getVM()->states['debug'] = function (array $args, VM $vm) use (&$rslt) {
+    foreach ($args as $arg) {
+        $rslt .= @var_export($arg, true);
+    }
+    return $args[0];
+};
+$facade->getVM()->states['write_file'] = function (array $args, VM $vm) {
+    return $vm->throwError('permissionDeniedError');
+};
+
+$facade->run('#import_directory ' . __DIR__ . '/libs/', __DIR__);
 
 try {
     $facade->run($code, 'PLAYGROUND_CODE');

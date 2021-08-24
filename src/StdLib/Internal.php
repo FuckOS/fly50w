@@ -122,4 +122,13 @@ class Internal extends LibraryBase
         $key = $args[1];
         return isset($arr[$key]);
     }
+
+    #[FunctionName('quit')]
+    public function quit(array $args, VM $vm)
+    {
+        if (count($args) != 1) {
+            return $vm->throwError('wrongArgumentNumberError');
+        }
+        exit($args[0]);
+    }
 }
