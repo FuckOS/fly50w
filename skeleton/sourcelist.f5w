@@ -1,0 +1,10 @@
+!import src/main.f5w
+
+# Please list all the source files in your project
+# using `!import` above.
+
+# Call the 'main' function if exists.
+# Comment this when it is a library.
+let _main_exists_flag = false;
+try { main; } except (@undefinedVariableError) { _main_exists_flag = true; };
+try { assert(_main_exists_flag); } except (@assertError) { main(); };

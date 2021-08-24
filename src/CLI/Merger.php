@@ -27,14 +27,20 @@ class Merger
 
     public function mergeFile(string $filename, ?CLImate $cli = null, string $last_file = ''): string
     {
-        $code = $this->getFile($filename, $last_file);
+        $curr_file = $this->getFile($filename, $last_file);
+        $code = '';
+        if (substr($curr_file, 0, 3) == '**$') {
+            $code = substr($curr_file, 3);
+        } else {
+            $code = file_get_contents($curr_file);
+        }
         if (substr($filename, 0, 3) == '**$') {
             $filename = getcwd();
         }
         $lines = explode("\n", $code);
 
         if ($cli !== null) {
-            $cli->out("<green><bold>Input file: </bold></green> <underline>$filename</underline>");
+            $cli->out("<green><bold>Input file: </bold></green> <underline>$curr_file</underline>");
         }
 
         foreach ($lines as &$line) {
@@ -49,7 +55,7 @@ class Merger
                 break;
             }
             $file = trim(substr($line, 8));
-            $line = $this->mergeFile($file, $cli, $filename);
+            $line = $this->mergeFile($file, $cli, $curr_file);
         }
 
         return implode("\n", $lines);
@@ -63,16 +69,16 @@ class Merger
     protected function getFile(string $filename, string $current_file = ''): string
     {
         if (substr($filename, 0, 3) == '**$') {
-            return substr($filename, 3);
+            return $filename;
         }
         foreach ($this->importDirectories as $dir) {
             if (file_exists($dir . '/' . $filename)) {
-                return file_get_contents($dir . '/' . $filename);
+                return realpath($dir . '/' . $filename);
             }
         }
         if (!file_exists(dirname($current_file) . '/' . $filename)) {
             throw new \Exception("<red><bold>Import file not found:</bold></red> $filename");
         }
-        return file_get_contents(dirname($current_file) . '/' . $filename);
+        return realpath(dirname($current_file) . '/' . $filename);
     }
 }

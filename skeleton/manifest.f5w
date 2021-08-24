@@ -1,0 +1,28 @@
+#import_directory .
+!import libs/sourcelist.f5w
+!import sourcelist.f5w
+# Please define all the meta imports and import directories
+# above.
+
+# This is the metadata definition of your project
+#META{
+    # The name of your project
+    let _project_name        = "hello_world";
+    # The author of your project
+    let _project_author      = "test <test@test.com>";
+    # The description of your project
+    let _project_description = "An example project for fly50w.";
+    # Build configure
+    let _build_configure     = dict(
+        array("type",    "application"),
+        array("output",  "/dist/main.f5wc"),
+        array("entrace", "main")
+    );
+    # Dependencies
+    let _dependencies        = dict(
+        array("std", dict(
+            array("version",    ">=0.1.0"),
+            array("autoupdate", true)
+        ))
+    );
+#}META

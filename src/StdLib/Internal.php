@@ -3,6 +3,7 @@
 namespace Fly50w\StdLib;
 
 use Fly50w\VM\VM;
+use RuntimeException;
 use Symfony\Component\VarDumper\VarDumper;
 
 class Internal extends LibraryBase
@@ -46,10 +47,27 @@ class Internal extends LibraryBase
         return $args[0];
     }
 
+    #[FunctionName('get_variable')]
+    public function getVariable(array $args, VM $vm)
+    {
+        if (count($args) != 1) {
+            return $vm->throwError('wrongArgumentNumberError');
+        }
+        return $vm->getVariable($args[0]);
+    }
+
     #[FunctionName('array')]
     public function consArray(array $args, VM $vm)
     {
         return $args;
+    }
+
+    #[FunctionName('dict')]
+    public function dict(array $args, VM $vm)
+    {
+        $keys = array_map(fn ($n) => $n[0], $args);
+        $vals = array_map(fn ($n) => $n[1], $args);
+        return array_combine($keys, $vals);
     }
 
     #[FunctionName('merge')]
@@ -70,11 +88,11 @@ class Internal extends LibraryBase
     public function readFile(array $args, VM $vm)
     {
         if (count($args) != 1) {
-            return $vm->throwError('wrongArgumentNumber');
+            return $vm->throwError('wrongArgumentNumberError');
         }
         $f = $args[0];
         if (!file_exists($f)) {
-            return $vm->throwError('fileNotExists');
+            return $vm->throwError('fileNotExistsError');
         }
         return file_get_contents($f);
     }
@@ -83,14 +101,14 @@ class Internal extends LibraryBase
     public function writeFile(array $args, VM $vm)
     {
         if (count($args) != 2) {
-            return $vm->throwError('wrongArgumentNumber');
+            return $vm->throwError('wrongArgumentNumberError');
         }
         $f = $args[0];
         $d = $args[1];
         $append = isset($args[2]) ? false : $args[2];
         $r = file_put_contents($f, $d, $append ? FILE_APPEND : 0);
         if (!$r) {
-            return $vm->throwError('fileWriteFailed');
+            return $vm->throwError('fileWriteFailedError');
         }
         return true;
     }

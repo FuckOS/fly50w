@@ -40,6 +40,7 @@ class VM
     ];
 
     public ?Label $currentError = null;
+    public ?string $lastErrorMessage = null;
 
     public function __construct()
     {
@@ -53,6 +54,9 @@ class VM
             $rslt = $this->runNode($child);
             if ($rslt instanceof ReturnFlag) {
                 return $rslt->data;
+            }
+            if ($this->currentError !== null) {
+                throw new RuntimeException("Uncaught error: " . $this->currentError->getName());
             }
             if ($rslt !== null) $last_rslt = $rslt;
         }
@@ -151,7 +155,12 @@ class VM
             return function (array $args, VM $vm) use ($node) {
                 $params = $node->getParams();
                 if (count($args) != count($params)) {
-                    throw new RuntimeException('Wrong argument number');
+                    return $this->throwError(
+                        'wrongArgumentNumberError',
+                        'Wrong argument number calling, ' .
+                            count($params) .
+                            ' expected'
+                    );
                 }
                 $params = array_map(fn ($v) => $node->getScope() . $v, $params);
                 foreach ($params as $k => $v) {
@@ -176,8 +185,14 @@ class VM
         }
         if ($node instanceof FunctionCallNode) {
             $func = $this->getVariable($node->getFunction(), $node->getScope());
+            if ($func instanceof ThrowFlag) {
+                return $func;
+            }
             if (!is_callable($func)) {
-                throw new Exception("Attempting to call $func which is not a function");
+                $this->throwError(
+                    'notCallableError',
+                    'Variable ' . $node->getFunction() . ' is not callable'
+                );
             }
             $args = [];
             if (!($node->getTopChild() instanceof ArgumentNode)) {
@@ -255,7 +270,7 @@ class VM
         $scope = $nodeScope;
         while (!array_key_exists($scope . $name, $this->states)) {
             if ($scope->isRoot()) {
-                throw new RuntimeException('Undefined variable: ' . $name);
+                return $this->throwError('undefinedVariableError', 'Undefined variable: ' . $name);
             }
             $scope = $scope->upperScope();
         }
@@ -280,10 +295,16 @@ class VM
         return $this;
     }
 
-    public function throwError(string $label): ThrowFlag
+    public function throwError(string $label, ?string $msg = null): ThrowFlag
     {
         $this->currentError = new Label($label);
+        $this->lastErrorMessage = $msg ?? $this->lastErrorMessage;
         return new ThrowFlag($this->currentError);
+    }
+
+    public function getLastErrorMessage(): ?string
+    {
+        return $this->lastErrorMessage;
     }
 
     public function recoverFromError(): self

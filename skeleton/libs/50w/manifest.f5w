@@ -1,0 +1,11 @@
+!import sourcelist.f5w
+
+#META{
+    let _project_name        = "50w";
+    let _project_author      = "FlyOS <postmaster@flyos.top>";
+    let _project_description = "50w lines of empty code to silent the compiler.";
+    let _build_configure     = dict(
+        array("type", "library")
+    );
+    let _dependencies        = dict();
+#}META

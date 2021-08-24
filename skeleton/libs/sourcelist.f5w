@@ -1,0 +1,6 @@
+!import std/io.f5w
+!import 50w/sourcelist.f5w
+
+# Please list all the libraries in your project
+# using `!import` above.
+# Just import the library's sourcelist.f5w

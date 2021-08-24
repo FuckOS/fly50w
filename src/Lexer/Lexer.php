@@ -10,7 +10,6 @@ namespace Fly50w\Lexer;
 
 use Fly50w\Lexer\Token;
 use Fly50w\Utils\IgnoreUtil;
-use Symfony\Component\VarDumper\VarDumper;
 
 class Lexer
 {
@@ -212,11 +211,13 @@ class Lexer
         if (
             $current === '-' &&
             is_numeric($next_char) &&
-            $last_token !== null &&
-            strpos(
-                haystack: $char_delimiters,
-                needle: $last_token
-            ) !== false
+            (
+                ($last_token !== null &&
+                    strpos(
+                        haystack: $char_delimiters,
+                        needle: $last_token
+                    ) !== false) ||
+                ($last_token === null))
         ) {
             return false;
         }
