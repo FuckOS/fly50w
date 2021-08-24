@@ -16,7 +16,7 @@ on:
 env:
   # Use docker.io for Docker Hub if empty
   REGISTRY: docker.io
-  IMAGE_NAME: xtlsoft/fly50w
+  IMAGE_NAME: xtlsoft/fly50w-playground
 #   REGISTRY: ghcr.io
   # github.repository as <account>/<repo>
 #   IMAGE_NAME: ${{ github.repository }}
@@ -59,7 +59,7 @@ jobs:
       - name: Build and push Docker image
         uses: docker/build-push-action@ad44023a93711e3deb337508980b4b5e9bcdc5dc
         with:
-          context: .
+          context: ./playground
           push: ${{ github.event_name != 'pull_request' }}
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
