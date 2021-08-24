@@ -77,6 +77,9 @@ class Node
         return count($this->children) == 0;
     }
 
+    /**
+     * @return Node[]
+     */
     public function getChildren(): array
     {
         return $this->children;

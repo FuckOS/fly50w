@@ -23,10 +23,12 @@ use Fly50w\Parser\AST\VariableNode;
 use Fly50w\Parser\AST\Internal\LetFlagNode;
 use Fly50w\Exceptions\SyntaxErrorException;
 use Fly50w\Exceptions\UnmatchedBracketsException;
+use Fly50w\Parser\AST\ArrayAccessNode;
 use Fly50w\Parser\AST\ExceptNode;
 use Fly50w\Parser\AST\LabelNode;
 use Fly50w\Parser\AST\ThrowNode;
 use Fly50w\Parser\AST\TryNode;
+use Symfony\Component\VarDumper\VarDumper;
 
 class Parser
 {
@@ -166,6 +168,8 @@ class Parser
                         case '>=':
                         case '<':
                         case '>':
+                        case '.':
+                        case '=>':
                             $curr = (new OperatorNode($token->value))->addChild($curr->popChild())->setParent($curr);
                             $curr->getParent()->addChild($curr);
                             break;
@@ -293,6 +297,9 @@ class Parser
                             }
                             break;
                         case ',':
+                            if ($curr->isFull()) {
+                                $curr = $curr->getParent();
+                            }
                             if ($curr instanceof FunctionCallNode) {
                                 $curr = (new ArgumentNode())->addChildren($curr->purgeChildren())->setParent($curr);
                                 $curr->getParent()->addChild($curr);
@@ -330,6 +337,23 @@ class Parser
                                     break;
                                 }
                             }
+                            break;
+                        case '[':
+                            $brackets->push('[');
+                            $aan = new ArrayAccessNode();
+                            $aan->addChild($curr->popChild());
+                            $curr->addChild($aan);
+                            $curr = $aan;
+                            break;
+                        case ']':
+                            $last = $brackets->pop();
+                            if ($last != '[') {
+                                throw new UnmatchedBracketsException();
+                            }
+                            while (!($curr instanceof ArrayAccessNode)) {
+                                $curr = $curr->getParent();
+                            }
+                            $curr = $curr->getParent();
                             break;
                     }
                     break;

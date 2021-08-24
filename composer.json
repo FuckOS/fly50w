@@ -15,7 +15,8 @@
         "php": ">=8.0",
         "league/climate": "^3.7",
         "symfony/yaml": "^5.3",
-        "symfony/var-dumper": "^5.3"
+        "symfony/var-dumper": "^5.3",
+        "react/http": "^1.5.0"
     },
     "bin": [
         "fly50w"

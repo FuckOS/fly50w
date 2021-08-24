@@ -3,7 +3,6 @@
 namespace Fly50w\StdLib;
 
 use Fly50w\VM\VM;
-use RuntimeException;
 use Symfony\Component\VarDumper\VarDumper;
 
 class Internal extends LibraryBase
@@ -111,5 +110,16 @@ class Internal extends LibraryBase
             return $vm->throwError('fileWriteFailedError');
         }
         return true;
+    }
+
+    #[FunctionName('has_key')]
+    public function hasKey(array $args, VM $vm)
+    {
+        if (count($args) != 2) {
+            return $vm->throwError('wrongArgumentNumberError');
+        }
+        $arr = $args[0];
+        $key = $args[1];
+        return isset($arr[$key]);
     }
 }

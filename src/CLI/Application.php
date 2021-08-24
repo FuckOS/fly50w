@@ -34,6 +34,11 @@ class Application
                 'longPrefix' => 'run',
                 'description' => 'File to run'
             ],
+            'new-project' => [
+                'prefix' => 'n',
+                'longPrefix' => 'new-project',
+                'description' => 'Create a new project using skeleton'
+            ],
             'interactive' => [
                 'prefix' => 'i',
                 'longPrefix' => 'interactive',
@@ -92,6 +97,7 @@ class Application
                         'Compile a program',
                         'Run a program',
                         'Run REPL',
+                        'Create new project',
                         'Show help text',
                         'Exit'
                     ]
@@ -130,6 +136,13 @@ class Application
                     $this->cli->br()->out('Fly50w REPL');
                     (new REPL)->loop();
                 }
+                if (in_array('Create new project', $in)) {
+                    $input = $this->cli
+                        ->input('<bold>=> <magenta>Directory</magenta></bold> [.]:')
+                        ->defaultTo('.')
+                        ->prompt();
+                    $this->doNewProject($input);
+                }
                 $this->cli->br();
             }
             return;
@@ -147,6 +160,11 @@ class Application
         if ($this->cli->arguments->defined('run')) {
             $output = $this->cli->arguments->get('run');
             $this->doRun($output);
+            $flag = true;
+        }
+        if ($this->cli->arguments->defined('new-project')) {
+            $input = $this->cli->arguments->get('new-project');
+            $this->doNewProject($input);
             $flag = true;
         }
         if (!$flag) {
@@ -175,6 +193,20 @@ class Application
             return;
         }
         $vm->execute($ast);
+    }
+
+    protected function doNewProject(string $dir)
+    {
+        if (!is_dir($dir)) {
+            if (file_exists($dir)) {
+                $this->cli->error("$dir is a file.");
+                exit(1);
+            }
+            mkdir($dir, recursive: true);
+        }
+        $skeleton_dir = dirname(dirname(__DIR__)) . '/skeleton/*';
+        `cp -r $skeleton_dir $dir`;
+        $this->cli->info("<bold>New project created at $dir.</bold>");
     }
 
     protected function doCompile(string $input, string $output)

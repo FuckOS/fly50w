@@ -4,6 +4,8 @@ Fly50W is a new language which helps you build simple apps using more than 500k 
 
 ## Installation
 
+### 1. From source
+
 First you need to setup PHP 8.0 environment on your machine.
 
 For Ubuntu users, do the following:
@@ -29,6 +31,38 @@ Now you've installed all the dependencies on your machine. You can simply run:
 ```
 
 To see the help message.
+
+### 2. From Composer
+
+First you need to have PHP 8.0 and Composer 2.1 installed.
+
+Then run:
+
+```bash
+composer g require flylang/fly50w:dev-main
+```
+
+And you will able to run
+
+```bash
+composer exec fly50w
+```
+
+to access fly50w.
+
+### 3. From Docker
+
+You can run this for fly50w compiler and VM:
+
+```bash
+docker run --rm -ti xtlsoft/fly50w:main
+```
+
+You can run this for fly50w playground server:
+
+```bash
+docker run -p 28111:28111 -d xtlsoft/fly50w-playground:main
+```
 
 ## Examples
 

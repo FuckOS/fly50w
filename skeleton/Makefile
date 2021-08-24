@@ -1,4 +1,4 @@
-FLYC=../fly50w
+FLYC=fly50w
 INPUT=manifest.f5w
 OUTPUT=./dist/main.f5wc
 

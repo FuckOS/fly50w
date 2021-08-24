@@ -26,10 +26,13 @@ use Fly50w\VM\Internal\BreakFlag;
 use Fly50w\VM\Internal\ReturnFlag;
 use Fly50w\VM\Types\Label;
 use Fly50w\Exceptions\RuntimeException;
+use Fly50w\Exceptions\SyntaxErrorException;
+use Fly50w\Parser\AST\ArrayAccessNode;
 use Fly50w\Parser\AST\ExceptNode;
 use Fly50w\Parser\AST\LabelNode;
 use Fly50w\Parser\AST\ThrowNode;
 use Fly50w\StdLib\Internal;
+use Fly50w\StdLib\WebServer;
 use Fly50w\VM\Internal\PurgeResultFlag;
 use Fly50w\VM\Internal\ThrowFlag;
 
@@ -45,6 +48,7 @@ class VM
     public function __construct()
     {
         new Internal($this);
+        new WebServer($this);
     }
 
     public function execute(RootNode $ast): mixed
@@ -129,13 +133,22 @@ class VM
             return new ThrowFlag($err);
         }
         if ($node instanceof AssignNode) {
-            if (
-                !($node->getBottomChild() instanceof VariableNode) ||
-                $node->countChildren() != 2
-            ) {
+            if ($node->countChildren() != 2) {
                 throw new InvalidASTException('Excepted VariableNode child for AssignNode');
             }
-            $name = $node->getChildren()[0]->getName();
+            $name = '';
+            $offset = [];
+            $bottom_child = $node->getBottomChild();
+            while ($bottom_child instanceof ArrayAccessNode) {
+                $offset[] = $bottom_child->countChildren() == 2 ?
+                    $this->runNode($bottom_child->getChildren()[1]) : INF;
+                $bottom_child = $bottom_child->getBottomChild();
+            }
+            if ($bottom_child instanceof VariableNode) {
+                $name = $bottom_child->getName();
+            } else {
+                throw new InvalidASTException('Excepted VariableNode child for AssignNode');
+            }
             if ($node->isLet()) {
                 $name = $node->getScope() . $name;
             } else {
@@ -148,8 +161,21 @@ class VM
                 }
                 $name = $scope . $name;
             }
-            $this->states[$name] = $this->runNode($node->getChildren()[1]);
-            return $this->states[$name];
+            $curr = &$this->states[$name];
+            $offset = array_reverse($offset);
+            foreach ($offset as $k) {
+                if (!is_array($curr)) {
+                    return $this->throwError('notArrayAccessibleError');
+                }
+                if ($k === INF) {
+                    $curr = &$curr[count($curr) - 1];
+                } else {
+                    $curr = &$curr[$k];
+                }
+            }
+            $val = $this->runNode($node->getChildren()[1]);
+            $curr = $val;
+            return $val;
         }
         if ($node instanceof FunctionNode) {
             return function (array $args, VM $vm) use ($node) {
@@ -259,6 +285,21 @@ class VM
             }
             return null;
         }
+        if ($node instanceof ArrayAccessNode) {
+            $childs_count = $node->countChildren();
+            if ($childs_count != 2) {
+                throw new InvalidASTException('Should pass 2 children for ArrayAccessNode');
+            }
+            $arr = $this->runNode($node->getChildren()[0]);
+            $offset = $this->runNode($node->getChildren()[1]);
+            if (!is_array($arr)) {
+                return $this->throwError('notArrayAccessibleError');
+            }
+            if (!isset($arr[$offset])) {
+                return $this->throwError('undefinedKeyError');
+            }
+            return $arr[$offset];
+        }
         return null;
     }
 
@@ -319,6 +360,17 @@ class VM
             throw new InvalidASTException('Excepted 2 child for OperatorNode');
         }
         $a = $this->runNode($node->getChildren()[0]);
+        if ($node->getOperator() === '.') {
+            $c1 = $node->getChildren()[1];
+            if (!($c1 instanceof VariableNode)) {
+                throw new InvalidASTException('Should be VariableNode using `.` operator');
+            }
+            $b = $c1->getName();
+            if (!isset($a[$b])) {
+                return $this->throwError('undefinedKeyError');
+            }
+            return $a[$b];
+        }
         $b = $this->runNode($node->getChildren()[1]);
         switch ($node->getOperator()) {
             case '+':
@@ -350,6 +402,8 @@ class VM
                 return $a > $b;
             case '<':
                 return $a < $b;
+            case '=>':
+                return [$a, $b];
             default:
                 throw new InvalidASTException('Unknown operator');
         }
