@@ -33,6 +33,11 @@ class Facade
         return $this->vm;
     }
 
+    public function getMerger(): Merger
+    {
+        return $this->merger;
+    }
+
     public function runFile(string $filename): mixed
     {
         $code = $this->merger->mergeFile($filename);

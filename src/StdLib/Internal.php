@@ -10,11 +10,13 @@ class Internal extends LibraryBase
     public function init(VM $vm)
     {
         $vm->assignNativeFunction('strlen', 'strlen');
-        $vm->assignNativeFunction('count', 'count');
+        $vm->assignNativeFunction('len', 'count');
         $vm->assignNativeFunction('sin', 'sin');
         $vm->assignNativeFunction('cos', 'cos');
         $vm->assignNativeFunction('tan', 'tan');
         $vm->assignNativeFunction('string_to_array', 'str_split');
+        $vm->assignNativeFunction('join', 'implode');
+        $vm->assignNativeFunction('split', 'explode');
     }
 
     #[FunctionName('assert')]
@@ -26,6 +28,19 @@ class Internal extends LibraryBase
             }
         }
         return true;
+    }
+
+    #[FunctionName('slice')]
+    public function slice(array $args, VM $vm)
+    {
+        if (!isset($args[0])) return [];
+        if (is_array($args[0])) {
+            return call_user_func_array('array_slice', $args);
+        } else if (is_string($args[0])) {
+            return call_user_func_array('substr', $args);
+        } else {
+            return $vm->throwError('typeError');
+        }
     }
 
     #[FunctionName('print')]

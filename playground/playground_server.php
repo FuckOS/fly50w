@@ -159,7 +159,7 @@ $facade->getVM()->states['write_file'] = function (array $args, VM $vm) {
     return $vm->throwError('permissionDeniedError');
 };
 
-$facade->run('#import_directory ' . __DIR__ . '/libs/', __DIR__);
+$facade->getMerger()->addImportDirectory(__DIR__ . '/libs/');
 
 try {
     $facade->run($code, 'PLAYGROUND_CODE');

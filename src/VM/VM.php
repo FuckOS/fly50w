@@ -189,22 +189,30 @@ class VM
                     );
                 }
                 $params = array_map(fn ($v) => $node->getScope() . $v, $params);
+                $backup = [];
                 foreach ($params as $k => $v) {
+                    if (isset($vm->states[$v])) $backup[$v] = $vm->states[$v];
                     $vm->states[$v] = $args[$k];
                 }
                 $last_rslt = null;
                 foreach ($node->getChildren() as $child) {
                     $rslt = $vm->runNode($child);
                     if ($rslt instanceof ReturnFlag) {
-                        return $rslt->data;
+                        $last_rslt = $rslt->data;
+                        goto RESTORE_STATE;
                     }
                     if ($rslt instanceof ThrowFlag) {
-                        return $rslt;
+                        $last_rslt = $rslt;
+                        goto RESTORE_STATE;
                     }
                     $last_rslt = $rslt ?? $last_rslt;
                 }
+                RESTORE_STATE:
                 foreach ($params as $k => $v) {
                     unset($vm->states[$v]);
+                }
+                foreach ($backup as $k => $v) {
+                    $vm->states[$k] = $v;
                 }
                 return $last_rslt;
             };
