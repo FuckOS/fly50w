@@ -6,7 +6,7 @@ class Node
 {
     protected ?Node $parent = null;
     protected int $maxNodes = -1;
-    protected ?Scope $scope;
+    protected ?Scope $scope = null;
     /**
      * @var Node[]
      */
